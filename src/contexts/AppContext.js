@@ -8,6 +8,7 @@ const AppContextProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loadingUser, setLoadingUser] = useState(true);
     const [loading, setLoading] = useState(false);
+    const [openChatBox, setOpenChatBox] = useState(false)
     useEffect(() => {
         // Set up an authentication observer to track the user's sign-in state.
         const unsubscribe = auth.onAuthStateChanged((user) => {
@@ -33,6 +34,8 @@ const AppContextProvider = ({ children }) => {
         setLoadingUser,
         loading,
         setLoading,
+        openChatBox,
+        setOpenChatBox
     };
     return (
         <AppContext.Provider value={appContextData}>

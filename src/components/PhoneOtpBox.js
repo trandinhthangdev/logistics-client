@@ -2,12 +2,13 @@ import { BsFillShieldLockFill, BsTelephoneFill } from "react-icons/bs";
 import { CgSpinner } from "react-icons/cg";
 
 import OtpInput from "otp-input-react";
-import { useState } from "react";
+import {useContext, useState} from "react";
 import PhoneInput from "react-phone-input-2";
 import { auth } from "./../firebase.config";
 import { RecaptchaVerifier, signInWithPhoneNumber } from "firebase/auth";
 import { toast, Toaster } from "react-hot-toast";
 import "react-phone-input-2/lib/style.css";
+import {AppContext} from "../contexts/AppContext";
 
 const PhoneOtpBox = () => {
     const [otp, setOtp] = useState("");

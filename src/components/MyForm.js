@@ -258,7 +258,7 @@ const MyForm = () => {
                                         }));
                                         formRef.current.setFieldsValue({
                                             recipientAddressDistrict: "",
-                                            senderAddressWard: "",
+                                            recipientAddressWard: "",
                                         });
                                     }}
                                 >
