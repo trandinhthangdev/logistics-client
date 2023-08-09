@@ -1,7 +1,7 @@
 import logo from "./logo.svg";
 import "./App.css";
 import PhoneOtpBox from "./components/PhoneOtpBox";
-import { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "./contexts/AppContext";
 import {
     createBrowserRouter,
@@ -17,9 +17,11 @@ import AppAdminLayout from "./components/AppAdminLayout";
 import AdminLogin from "./pages/admin/login";
 import AdminHome from "./pages/admin/home";
 import Profile from "./pages/profile";
+import {Toaster} from "react-hot-toast";
+import LoadingBg from "./components/LoadingBg";
 
 function App() {
-    const { user, loadingUser } = useContext(AppContext);
+    const { user, loadingUser, loading } = useContext(AppContext);
     const router = createBrowserRouter([
         {
             path: "/",
@@ -86,7 +88,11 @@ function App() {
     if (loadingUser) {
         return <></>;
     }
-    return <RouterProvider router={router} />;
+    return <>
+        <Toaster toastOptions={{ duration: 4000 }} />
+        {loading && <LoadingBg />}
+        <RouterProvider router={router} />
+    </>;
     // if (loadingUser) {
     //     return <></>;
     // }

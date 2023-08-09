@@ -6,3 +6,6 @@ export const OrderStatusEnum = Object.freeze({
     DELIVERED: "DELIVERED",
     CANCELLED: "CANCELLED",
 });
+
+
+export const ADDRESS_VN = require('./../backoffice/addressvn.json')
