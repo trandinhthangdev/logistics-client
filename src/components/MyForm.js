@@ -1,26 +1,15 @@
-import React, { useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import { Form, Input, Select, DatePicker, Button, Row, Col } from "antd";
 import { useAddressHook } from "../hooks/useAddressHook";
 import axios from "axios";
+import { AppContext } from "../contexts/AppContext";
 
 const { Option } = Select;
 
 const MyForm = () => {
+    const { userInfo, user } = useContext(AppContext);
     const formRef = useRef(null);
-
-    const onFinish = (values) => {
-        console.log("Form values:", values);
-        // Handle form submission here
-        axios
-            .post("/api/orders", values)
-            .then((data) => {
-                console.log(data);
-            })
-            .catch((err) => {
-                console.error("Error creating order:", err);
-            });
-    };
-
+    const [data, setData] = useState(null);
     const [address, setAddress] = useState({
         senderAddressProvince: "",
         senderAddressDistrict: "",
@@ -47,6 +36,63 @@ const MyForm = () => {
             province: recipientAddressProvince,
             district: recipientAddressDistrict,
         });
+    useEffect(() => {
+        if (userInfo !== undefined) {
+            if (userInfo) {
+                setAddress({
+                    senderAddressProvince: userInfo.addressProvince,
+                    senderAddressDistrict: userInfo.addressDistrict,
+                });
+            }
+            setData(
+                userInfo
+                    ? {
+                          senderName: userInfo.name,
+                          senderPhone: user.phoneNumber,
+                          senderAddressProvince: userInfo.addressProvince,
+                          senderAddressDistrict: userInfo.addressDistrict,
+                          senderAddressWard: userInfo.addressWard,
+                          senderAddressDescription: userInfo.addressDescription,
+                          recipientName: "",
+                          recipientPhone: "",
+                          recipientAddressProvince: "",
+                          recipientAddressDistrict: "",
+                          recipientAddressWard: "",
+                          recipientAddressDescription: "",
+                          note: "",
+                      }
+                    : {
+                          senderName: "",
+                          senderPhone: user.phoneNumber,
+                          senderAddressProvince: "",
+                          senderAddressDistrict: "",
+                          senderAddressWard: "",
+                          senderAddressDescription: "",
+                          recipientName: "",
+                          recipientPhone: "",
+                          recipientAddressProvince: "",
+                          recipientAddressDistrict: "",
+                          recipientAddressWard: "",
+                          recipientAddressDescription: "",
+                          note: "",
+                      }
+            );
+        }
+    }, [userInfo]);
+    const onFinish = (values) => {
+        console.log("Form values:", values);
+        // Handle form submission here
+        axios
+            .post("/api/orders", values)
+            .then((data) => {
+                console.log(data);
+            })
+            .catch((err) => {
+                console.error("Error creating order:", err);
+            });
+    };
+
+    if (!data) return <></>;
 
     return (
         <div className="max-w-[600px] m-auto">
@@ -54,23 +100,7 @@ const MyForm = () => {
                 name="myForm"
                 onFinish={onFinish}
                 layout="vertical"
-                initialValues={{
-                    senderName: "",
-                    senderPhone: "",
-                    senderAddressProvince: "",
-                    senderAddressDistrict: "",
-                    senderAddressWard: "",
-                    senderAddressDescription: "",
-                    // shippingDate: "",
-                    recipientName: "",
-                    recipientPhone: "",
-                    recipientAddressProvince: "",
-                    recipientAddressDistrict: "",
-                    recipientAddressWard: "",
-                    recipientAddressDescription: "",
-                    // expectedDeliveryDate: "",
-                    note: "",
-                }}
+                initialValues={{ ...data }}
                 ref={formRef}
             >
                 <Form.Item
@@ -148,9 +178,17 @@ const MyForm = () => {
                                             ...prev,
                                             senderAddressDistrict: value,
                                         }));
+                                        formRef.current.setFieldsValue({
+                                            senderAddressWard: "",
+                                        });
                                     }}
                                 >
-                                    {senderDistricts.map((item) => {
+                                    {(senderDistricts.length > 0
+                                        ? senderDistricts
+                                        : senderAddressDistrict
+                                        ? [JSON.parse(senderAddressDistrict)]
+                                        : []
+                                    ).map((item) => {
                                         return (
                                             <Option
                                                 value={JSON.stringify(item)}

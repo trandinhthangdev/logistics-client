@@ -16,50 +16,77 @@ import DetailOrder from "./pages/detailOrder";
 import AppAdminLayout from "./components/AppAdminLayout";
 import AdminLogin from "./pages/admin/login";
 import AdminHome from "./pages/admin/home";
+import Profile from "./pages/profile";
 
 function App() {
     const { user, loadingUser } = useContext(AppContext);
     const router = createBrowserRouter([
         {
             path: "/",
-            element: <AppLayout>
-                <Home />
-            </AppLayout>,
+            element: (
+                <AppLayout>
+                    <Home />
+                </AppLayout>
+            ),
         },
         {
             path: "/new-order",
-            element: <AppLayout>
-                <NewOrder />
-            </AppLayout>,
+            element: (
+                <AppLayout>
+                    <NewOrder />
+                </AppLayout>
+            ),
         },
         {
             path: "/detail-order/:orderNumber",
-            element: <AppLayout>
-                <DetailOrder />
-            </AppLayout>,
+            element: (
+                <AppLayout>
+                    <DetailOrder />
+                </AppLayout>
+            ),
         },
-        ...(user ? [] : [{
-            path: "/admin/login",
-            element: <AppAdminLayout>
-                <AdminLogin />
-            </AppAdminLayout>
-        },{
-            path: "/login",
-            element: <AppLayout>
-                <PhoneOtpBox />
-            </AppLayout>,
-        }]),
+        ...(user
+            ? [
+                  {
+                      path: "/profile",
+                      element: (
+                          <AppLayout>
+                              <Profile />
+                          </AppLayout>
+                      ),
+                  },
+              ]
+            : [
+                  {
+                      path: "/admin/login",
+                      element: (
+                          <AppAdminLayout>
+                              <AdminLogin />
+                          </AppAdminLayout>
+                      ),
+                  },
+                  {
+                      path: "/login",
+                      element: (
+                          <AppLayout>
+                              <PhoneOtpBox />
+                          </AppLayout>
+                      ),
+                  },
+              ]),
         {
-            path: '/admin',
-            element: <AppAdminLayout>
-                <AdminHome />
-            </AppAdminLayout>
-        }
+            path: "/admin",
+            element: (
+                <AppAdminLayout>
+                    <AdminHome />
+                </AppAdminLayout>
+            ),
+        },
     ]);
     if (loadingUser) {
-        return <></>
+        return <></>;
     }
-    return  <RouterProvider router={router} />;
+    return <RouterProvider router={router} />;
     // if (loadingUser) {
     //     return <></>;
     // }
