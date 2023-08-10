@@ -17,8 +17,10 @@ import AppAdminLayout from "./components/AppAdminLayout";
 import AdminLogin from "./pages/admin/login";
 import AdminHome from "./pages/admin/home";
 import Profile from "./pages/profile";
-import {Toaster} from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 import LoadingBg from "./components/LoadingBg";
+import AdminChat from "./pages/admin/chat";
+import AdminTrackingOrder from "./pages/admin/trackingOrder";
 
 function App() {
     const { user, loadingUser, loading } = useContext(AppContext);
@@ -49,14 +51,43 @@ function App() {
         },
         ...(user
             ? [
-                  {
-                      path: "/profile",
-                      element: (
-                          <AppLayout>
-                              <Profile />
-                          </AppLayout>
-                      ),
-                  },
+                  ...(user.email
+                      ? [
+                            {
+                                path: "/admin",
+                                element: (
+                                    <AppAdminLayout>
+                                        <AdminHome />
+                                    </AppAdminLayout>
+                                ),
+                            },
+                            {
+                                path: "/admin/chat",
+                                element: (
+                                    <AppAdminLayout>
+                                        <AdminChat />
+                                    </AppAdminLayout>
+                                ),
+                            },
+                            {
+                                path: "/admin/tracking/:orderNumber",
+                                element: (
+                                    <AppAdminLayout>
+                                        <AdminTrackingOrder />
+                                    </AppAdminLayout>
+                                ),
+                            },
+                        ]
+                      : [
+                            {
+                                path: "/profile",
+                                element: (
+                                    <AppLayout>
+                                        <Profile />
+                                    </AppLayout>
+                                ),
+                            },
+                        ]),
               ]
             : [
                   {
@@ -76,23 +107,17 @@ function App() {
                       ),
                   },
               ]),
-        {
-            path: "/admin",
-            element: (
-                <AppAdminLayout>
-                    <AdminHome />
-                </AppAdminLayout>
-            ),
-        },
     ]);
     if (loadingUser) {
         return <></>;
     }
-    return <>
-        <Toaster toastOptions={{ duration: 4000 }} />
-        {loading && <LoadingBg />}
-        <RouterProvider router={router} />
-    </>;
+    return (
+        <>
+            <Toaster toastOptions={{ duration: 4000 }} />
+            {loading && <LoadingBg />}
+            <RouterProvider router={router} />
+        </>
+    );
     // if (loadingUser) {
     //     return <></>;
     // }

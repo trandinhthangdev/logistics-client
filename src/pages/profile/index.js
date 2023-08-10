@@ -3,12 +3,12 @@ import { AppContext } from "../../contexts/AppContext";
 import { Form, Input, Select, Row, Col } from "antd";
 import { useAddressHook } from "../../hooks/useAddressHook";
 import axios from "axios";
-import {toast, Toaster} from "react-hot-toast";
+import { toast, Toaster } from "react-hot-toast";
 
 const { Option } = Select;
 const Profile = (props) => {
     const formRef = useRef(null);
-    const { userInfo, setUserInfo, user,setLoading } = useContext(AppContext);
+    const { userInfo, setUserInfo, user, setLoading } = useContext(AppContext);
     const [data, setData] = useState(null);
 
     useEffect(() => {
@@ -41,7 +41,7 @@ const Profile = (props) => {
     });
     const onFinish = (values) => {
         console.log("Form values:", values);
-        setLoading(true)
+        setLoading(true);
         axios
             .post("/api/users/save-me", {
                 name: values.name,
@@ -52,32 +52,31 @@ const Profile = (props) => {
             })
             .then((res) => {
                 toast.success("Update profile successfully!");
-                setLoading(false)
-                setUserInfo(prev => ({
+                setLoading(false);
+                setUserInfo((prev) => ({
                     ...prev,
                     name: res.data.name,
                     addressProvince: res.data.addressProvince,
                     addressDistrict: res.data.addressDistrict,
                     addressWard: res.data.addressWard,
                     addressDescription: res.data.addressDescription,
-                }))
+                }));
             })
             .catch((err) => {
                 console.log("err", err.response);
-                toast.error(err.response)
-                setLoading(false)
+                toast.error(err.response);
+                setLoading(false);
             });
     };
     if (!data) return <></>;
     return (
         <div className="flex flex-col items-center">
-            <div
-                className="w-[600px] max-w-[calc(100vw-40px)]"
-            >
+            <div className="w-[600px] max-w-[calc(100vw-40px)]">
                 <div className="font-bold text-2xl mb-2 text-center">
                     Profile
                 </div>
                 <Form
+                    name="Profile"
                     layout="vertical"
                     onFinish={onFinish}
                     ref={formRef}
@@ -95,12 +94,8 @@ const Profile = (props) => {
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item
-                        name="phone"
-                        label="Phone"
-                        disabled
-                    >
-                        <Input disabled={true}/>
+                    <Form.Item name="phone" label="Phone" disabled>
+                        <Input disabled={true} />
                     </Form.Item>
                     <Form.Item label="Address">
                         <Row gutter={16}>
@@ -110,7 +105,8 @@ const Profile = (props) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select a province!",
+                                            message:
+                                                "Please select a province!",
                                         },
                                     ]}
                                 >
@@ -129,9 +125,7 @@ const Profile = (props) => {
                                     >
                                         {provinces.map((item) => {
                                             return (
-                                                <Option
-                                                    value={item.key}
-                                                >
+                                                <Option value={item.key}>
                                                     {item.name}
                                                 </Option>
                                             );
@@ -145,7 +139,8 @@ const Profile = (props) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select a district!",
+                                            message:
+                                                "Please select a district!",
                                         },
                                     ]}
                                 >
@@ -163,9 +158,7 @@ const Profile = (props) => {
                                     >
                                         {districts.map((item) => {
                                             return (
-                                                <Option
-                                                    value={item.key}
-                                                >
+                                                <Option value={item.key}>
                                                     {item.name}
                                                 </Option>
                                             );
@@ -186,9 +179,7 @@ const Profile = (props) => {
                                     <Select placeholder="Select Ward">
                                         {wards.map((item) => {
                                             return (
-                                                <Option
-                                                    value={item.key}
-                                                >
+                                                <Option value={item.key}>
                                                     {item.name}
                                                 </Option>
                                             );
@@ -197,16 +188,19 @@ const Profile = (props) => {
                                 </Form.Item>
                             </Col>
                             <Col span={24}>
-                                <Form.Item
-                                    name="addressDescription"
-                                >
+                                <Form.Item name="addressDescription">
                                     <Input.TextArea />
                                 </Form.Item>
                             </Col>
                         </Row>
                     </Form.Item>
                     <Form.Item className="text-right">
-                        <button type="submit" className="bg-orange-400 text-white rounded-md py-2 px-4 font-bold">Submit</button>
+                        <button
+                            type="submit"
+                            className="bg-orange-400 text-white rounded-md py-2 px-4 font-bold"
+                        >
+                            Submit
+                        </button>
                     </Form.Item>
                 </Form>
             </div>

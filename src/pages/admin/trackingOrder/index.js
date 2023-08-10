@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from "react";
-import ShippingOrderStatus from "./ShippingOrderStatus";
-import { useParams } from "react-router-dom";
 import axios from "axios";
-import { FiCopy } from "react-icons/fi";
+import { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
+import { renderStatusLabel, showAddressByKey } from "../../../utils/functions";
 import moment from "moment";
-import { renderStatusLabel, showAddressByKey } from "../../utils/functions";
+import { FiCopy } from "react-icons/fi";
 
-const DetailOrder = (props) => {
+const AdminTrackingOrder = (props) => {
     const { orderNumber } = useParams();
     const [data, setData] = useState(null);
 
@@ -16,10 +15,6 @@ const DetailOrder = (props) => {
             setData(res.data);
         });
     }, []);
-    if (!data) {
-        return <></>;
-    }
-
     const viewInfo = ({ label, value }) => {
         return (
             <div className="flex">
@@ -28,6 +23,9 @@ const DetailOrder = (props) => {
             </div>
         );
     };
+    if (!data) {
+        return <></>;
+    }
     const senderAddress = showAddressByKey({
         province: data.senderAddressProvince,
         district: data.senderAddressDistrict,
@@ -38,9 +36,6 @@ const DetailOrder = (props) => {
         district: data.recipientAddressDistrict,
         ward: data.recipientAddressWard,
     });
-    // const province = JSON.parse(data.recipientAddressProvince)?.name ?? "";
-    // const district = JSON.parse(data.recipientAddressDistrict)?.name ?? "";
-    // const ward = JSON.parse(data.recipientAddressWard)?.name ?? "";
     return (
         <div className="flex flex-col p-2">
             <div className="p-4 shadow-xl rounded-md flex flex-col items-center">
@@ -98,8 +93,7 @@ const DetailOrder = (props) => {
                     </div>
                 </div>
             </div>
-            <ShippingOrderStatus />
         </div>
     );
 };
-export default DetailOrder;
+export default AdminTrackingOrder;

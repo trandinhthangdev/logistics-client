@@ -1,24 +1,32 @@
-import {OrderStatusEnum} from "./contants";
+import { ADDRESS_VN, OrderStatusEnum } from "./contants";
 
 export const renderStatusLabel = (statusCode) => {
     switch (statusCode) {
         case OrderStatusEnum.PENDING:
-            return (
-                'pending'
-            )
+            return "pending";
         case OrderStatusEnum.SHIPPED:
-            return (
-                'shipped'
-            )
+            return "shipped";
         case OrderStatusEnum.DELIVERED:
-            return (
-                'delivered'
-            )
+            return "delivered";
         case OrderStatusEnum.CANCELLED:
-            return (
-                'cancelled'
-            )
+            return "cancelled";
         default:
-            return ''
+            return "";
     }
-}
+};
+
+export const showAddressByKey = ({ province, district, ward }) => {
+    try {
+        return {
+            province: ADDRESS_VN[province],
+            district: ADDRESS_VN[province].district[district],
+            ward: ADDRESS_VN[province].district[district].wards[ward],
+        };
+    } catch (e) {
+        return {
+            province: "",
+            district: "",
+            ward: "",
+        };
+    }
+};

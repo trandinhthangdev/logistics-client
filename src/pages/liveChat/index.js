@@ -5,7 +5,7 @@ import {MdEmojiEmotions, MdSend} from "react-icons/md"
 import moment from "moment";
 import {useContext, useEffect, useRef, useState} from "react";
 import {AppContext} from "../../contexts/AppContext";
-import EmojiBtn from "./EmojiBtn";
+import EmojiBtn from "../../components/EmojiBtn";
 import {app} from "../../firebase.config";
 
 const db = getFirestore(app);

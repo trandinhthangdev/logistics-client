@@ -14,7 +14,7 @@ const AppContextProvider = ({ children }) => {
     const [isAuthModal, setIsAuthModal] = useState(false);
 
     useEffect(() => {
-        if (user) {
+        if (user && !user?.email) {
             setIsAuthModal(false);
             axios
                 .get("/api/users/get-me")
