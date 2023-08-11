@@ -1,11 +1,18 @@
 import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
-import {Table, Input} from "antd";
+import {Table, Input, Select} from "antd";
 import {FaEye, FaPlus, FaShippingFast} from "react-icons/fa"
 import {Link} from "react-router-dom";
 import {debounce} from "lodash";
 import {AppContext} from "../../contexts/AppContext";
 import {BiLogIn} from "react-icons/bi";
+import OrderNumber from "../../components/OrderNumber";
+import ChangeStatus from "../../components/ChangeStatus";
+import {showAddressByKey} from "../../utils/functions";
+import {AiOutlineArrowRight} from "react-icons/ai";
+import {STATUSES} from "../../utils/contants";
+const { Option } = Select;
+
 const pageSize = 10;
 const Home = (props) => {
     const { user, setIsAuthModal } = useContext(AppContext);
@@ -15,14 +22,16 @@ const Home = (props) => {
         page: 0,
         searchText: '',
         hasMore: true,
-        loading: true
+        loading: true,
+        filters: {},
     })
     const {
         items,
         page,
         searchText,
         hasMore,
-        loading
+        loading,
+        filters
     } = data;
 
     const debouncedSearch = useRef(
@@ -60,9 +69,12 @@ const Home = (props) => {
             ...prev,
             loading: true
         }))
-        axios.get(`/api/orders?page=${page}&limit=${pageSize}&search=${searchText.trim()}`)
+        axios.get(`/api/orders?page=${page}&limit=${pageSize}&search=${searchText.trim()}&${Object.keys(
+            filters
+        )
+            .map((key) => `${key}=${filters[key]}`)
+            .join("&")}`)
             .then(res => {
-                console.log(res.data)
                 setData(prev => ({
                     ...prev,
                     items: page === 1 ? res.data : [...prev.items, ...res.data],
@@ -74,12 +86,6 @@ const Home = (props) => {
         })
     }
 
-    const handleSearch = () => {
-        setData(prev => ({
-            ...prev,
-            page: 0
-        }))
-    }
     const observer = useRef()
     const lastEndRef = useCallback(node => {
         if (loading) return
@@ -99,85 +105,122 @@ const Home = (props) => {
 
     const columns = [
         {
-            title: 'Order Number',
-            dataIndex: 'orderNumber',
-            key: 'orderNumber',
-        },
-        {
-            title: 'Sender',
-            dataIndex: 'senderInfo',
-            key: 'senderInfo',
-            render:(value, record) => {
-                return <div>
-                    <div>{record.senderName}</div>
-                    <div>{record.senderPhone}</div>
-                </div>
+            title: "Order Number",
+            dataIndex: "orderNumber",
+            key: "orderNumber",
+            render: (value) => {
+                return (
+                    <OrderNumber orderNumber={value}/>
+                )
             }
         },
         {
-            title: 'Sender Address',
-            dataIndex: 'senderAddress',
-            key: 'senderAddress',
-            render:(value, record) => {
-                const province = JSON.parse(record.senderAddressProvince)?.name ?? ""
-                const district = JSON.parse(record.senderAddressDistrict)?.name ?? ""
-                const ward = JSON.parse(record.senderAddressWard)?.name ?? ""
-                return <div>
-                    <div>{`${province}, ${district}, ${ward}`}</div>
-                    <div>{record.senderAddressDescription}</div>
-                </div>
-            }
+            title: "Status",
+            dataIndex: "status",
+            key: "status",
+            render: (value, record) => {
+                return <ChangeStatus data={record} onSuccess={() => {
+                    setData(prev => ({
+                        ...prev,
+                        page: 0
+                    }))
+                }} />;
+            },
         },
         {
-            title: 'Recipient',
-            dataIndex: 'recipientInfo',
-            key: 'recipientInfo',
-            render:(value, record) => {
-                return <div>
-                    <div>{record.recipientName}</div>
-                    <div>{record.recipientPhone}</div>
-                </div>
-            }
+            title: "Sender",
+            dataIndex: "senderInfo",
+            key: "senderInfo",
+            render: (value, record) => {
+                return (
+                    <div>
+                        <div>{record.senderName}</div>
+                        <div>{record.senderPhone}</div>
+                    </div>
+                );
+            },
         },
         {
-            title: 'Recipient Address',
-            dataIndex: 'recipientAddress',
-            key: 'recipientAddress',
-            render:(value, record) => {
-                const province = JSON.parse(record.recipientAddressProvince)?.name ?? ""
-                const district = JSON.parse(record.recipientAddressDistrict)?.name ?? ""
-                const ward = JSON.parse(record.recipientAddressWard)?.name ?? ""
-                return <div>
-                    <div>{`${province}, ${district}, ${ward}`}</div>
-                    <div>{record.recipientAddressDescription}</div>
-                </div>
-            }
+            title: "Sender Address",
+            dataIndex: "senderAddress",
+            key: "senderAddress",
+            render: (value, record) => {
+                const { province, district, ward } = showAddressByKey({
+                    province: record.senderAddressProvince,
+                    district: record.senderAddressDistrict,
+                    ward: record.senderAddressWard,
+                });
+                return (
+                    <div className="italic">
+                        <div>{`${province}, ${district}, ${ward}`}</div>
+                        <div>{record.senderAddressDescription}</div>
+                    </div>
+                );
+            },
         },
         {
-            title: '',
-            dataIndex: 'action',
-            key: 'action',
-            render:(value, record, index) => {
+            title: "Recipient",
+            dataIndex: "recipientInfo",
+            key: "recipientInfo",
+            render: (value, record) => {
+                return (
+                    <div>
+                        <div>{record.recipientName}</div>
+                        <div>{record.recipientPhone}</div>
+                    </div>
+                );
+            },
+        },
+        {
+            title: "Recipient Address",
+            dataIndex: "recipientAddress",
+            key: "recipientAddress",
+            render: (value, record) => {
+                const { province, district, ward } = showAddressByKey({
+                    province: record.recipientAddressProvince,
+                    district: record.recipientAddressDistrict,
+                    ward: record.recipientAddressWard,
+                });
+                return (
+                    <div className="italic">
+                        <div>{`${province}, ${district}, ${ward}`}</div>
+                        <div>{record.recipientAddressDescription}</div>
+                    </div>
+                );
+            },
+        },
+        {
+            title: "",
+            dataIndex: "action",
+            key: "action",
+            render: (value, record, index) => {
                 if (index === items.length - 1) {
                     return (
                         <div ref={lastEndRef}>
                             <Link to={`/detail-order/${record.orderNumber}`}>
-                                <div className="cursor-pointer p-2 rounded-md text-white bg-amber-600">
-                                    <FaEye />
+                                <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
+                                    <AiOutlineArrowRight />
                                 </div>
                             </Link>
                         </div>
-                    )
+                    );
                 }
                 return (
-                 <Link to={`/detail-order/${record.orderNumber}`}>
-                     <div className="cursor-pointer p-2 rounded-md text-white bg-amber-600">
-                         <FaEye />
-                     </div>
-                 </Link>
-                )
-            }
+                    <Link to={`/detail-order/${record.orderNumber}`}>
+                        <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
+                            <AiOutlineArrowRight />
+                        </div>
+                    </Link>
+                );
+            },
         },
+    ];
+    const statusOptions = [
+        {
+            value: "",
+            label: "All",
+        },
+        ...STATUSES
     ];
     return <div className="flex flex-col items-center">
         <div className="font-bold text-2xl">
@@ -190,27 +233,48 @@ const Home = (props) => {
             user
             ?
                 <>
-                    <div className="flex justify-center p-2">
+                    <div className="w-full flex items-center justify-between pb-2">
                         <Input.Search
                             className="max-w-[240px]"
                             value={searchTextInput}
                             onChange={(e) => {
-                                // setData((prev) => ({
-                                //     ...prev,
-                                //     searchText: e.target.value,
-                                // }));
                                 setSearchTextInput(e.target.value)
                             }}
-                            // onSearch={handleSearch}
+                        />
+                        <Select
+                            className="w-[120px]"
+                            placeholder="Select status"
+                            onChange={(value) => {
+                                const prevFilters = { ...filters };
+                                if (value) {
+                                    prevFilters.status = value;
+                                } else {
+                                    delete prevFilters.status;
+                                }
+                                setData((prev) => ({
+                                    ...prev,
+                                    filters: prevFilters,
+                                    page: 0,
+                                    items: [],
+                                }));
+                            }}
+                            value={filters?.status ?? ""}
+                        >
+                            {statusOptions.map((item) => {
+                                return <Option value={item.value}>{item.label}</Option>;
+                            })}
+                        </Select>
+                    </div>
+                    <div className="h-[calc(100vh-300px)]">
+                        <Table
+                            className="h-full"
+                            dataSource={items}
+                            columns={columns}
+                            scroll={{ x: true, y: 500 }}
+                            pagination={false}
+                            loading={loading}
                         />
                     </div>
-                    <Table
-                        dataSource={items}
-                        columns={columns}
-                        scroll={{ x: true, y: '100%' }}
-                        pagination={false}
-                        loading={loading}
-                    />
                 </>
                 :
                 <div className="p-4">

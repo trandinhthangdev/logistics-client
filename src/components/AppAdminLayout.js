@@ -55,10 +55,11 @@ const AppAdminLayout = ({children}) => {
                                 </div>
                             </Dropdown>
                             :
-                            <Link to={"/login"} className="text-3xl py-2 px-4 hover:bg-blue-400 hover:text-white rounded-md cursor-pointer">
-                                <div className="mr-2">
-                                    Login
-                                </div>
+                            <Link
+                                to={"/admin/login"}
+                                className="flex items-center py-2 px-4 hover:bg-blue-400 hover:text-white rounded-md cursor-pointer"
+                            >
+                                <div className="mr-2">Login</div>
                                 <BiLogIn />
                             </Link>
                     }

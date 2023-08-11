@@ -71,12 +71,18 @@ const LiveChat = (props) => {
                     messages.map((item, index) => {
                         return (
                                 <div className={`p-2 flex ${item.isAdmin ? 'justify-start' : 'justify-end'}`}>
-                                    <Tooltip title={moment(item.createdAt).format('LLL')}>
-                                    <div className={`rounded-2xl p-2 ${item.isAdmin ? 'bg-gray-100 text-gray-800' : 'bg-blue-600 text-white'}`}>
-                                        {item.text}
+                                    <div className={`flex flex-col ${
+                                        item.isAdmin
+                                            ? "items-start"
+                                            : "items-end"
+                                    }`}>
+                                        <div className={`rounded-2xl p-2 ${item.isAdmin ? 'bg-gray-100 text-gray-800' : 'bg-blue-600 text-white'}`}>
+                                            {item.text}
+                                        </div>
+                                        <div className="text-xs italic text-gray-400">
+                                            {moment(item.createdAt).format("LLL")}
+                                        </div>
                                     </div>
-                                    </Tooltip>
-
                                 </div>
                         )
                     })

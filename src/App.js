@@ -23,9 +23,10 @@ import AdminChat from "./pages/admin/chat";
 import AdminTrackingOrder from "./pages/admin/trackingOrder";
 import Page404 from "./pages/404";
 import ModalLogin from "./components/ModalLogin";
+import Login from "./pages/login";
 
 function App() {
-    const { user, loadingUser, loading, isAdmin, isAuthModal, setIsAuthModal } = useContext(AppContext);
+    const { user, userInfo, loading, isAdmin, isAuthModal, setIsAuthModal } = useContext(AppContext);
     const router = createBrowserRouter([
         {
             path: "/new-order",
@@ -104,7 +105,7 @@ function App() {
                       path: "/login",
                       element: (
                           <AppLayout>
-                              <PhoneOtpBox />
+                              <Login />
                           </AppLayout>
                       ),
                   },
@@ -126,7 +127,7 @@ function App() {
             </AppLayout>
         }
     ]);
-    if (loadingUser) {
+    if (user === undefined || userInfo === undefined) {
         return <></>;
     }
     return (
@@ -139,13 +140,6 @@ function App() {
             }}/>}
         </>
     );
-    // if (loadingUser) {
-    //     return <></>;
-    // }
-    // if (user) {
-    //     return <div className="text-black">login</div>;
-    // }
-    // return <PhoneOtpBox />;
 }
 
 export default App;

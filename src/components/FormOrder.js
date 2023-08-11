@@ -10,7 +10,7 @@ const { Option } = Select;
 
 const FormOrder = () => {
     const navigate = useNavigate();
-    const { userInfo, user, setLoading } = useContext(AppContext);
+    const { userInfo, user, setLoading, setIsAuthModal } = useContext(AppContext);
     const formRef = useRef(null);
     const [data, setData] = useState(null);
     const [address, setAddress] = useState({
@@ -66,7 +66,7 @@ const FormOrder = () => {
                       }
                     : {
                           senderName: "",
-                          senderPhone: user.phoneNumber,
+                          senderPhone: user?.phoneNumber ?? "",
                           senderAddressProvince: "",
                           senderAddressDistrict: "",
                           senderAddressWard: "",
@@ -83,6 +83,11 @@ const FormOrder = () => {
         }
     }, [userInfo]);
     const onFinish = (values) => {
+        // check login
+        if (!user) {
+            setIsAuthModal(true)
+            return;
+        }
         setLoading(true);
         axios
             .post("/api/orders", values)

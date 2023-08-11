@@ -39,7 +39,7 @@ const LoginForm = (props) => {
                 window.confirmationResult = confirmationResult;
                 setLoading(false);
                 setShowOTP(true);
-                toast.success("OTP sended successfully!");
+                toast.success("OTP sent successfully!");
             })
             .catch((error) => {
                 setLoading(false);
@@ -61,6 +61,7 @@ const LoginForm = (props) => {
 
     return (
         <div className="flex flex-col items-center">
+            <div id="recaptcha-container"></div>
             {showOTP ? (
                 <>
                     <div className="bg-white text-emerald-500 w-fit mx-auto p-4 rounded-full">
@@ -79,7 +80,7 @@ const LoginForm = (props) => {
                         otpType="number"
                         disabled={false}
                         autoFocus
-                        className="opt-container "
+                        className="opt-container [&_input]:border [&_input]:border-gray-200 mb-2 [&_input]:outline-0"
                     ></OtpInput>
                     <button
                         onClick={onOTPVerify}

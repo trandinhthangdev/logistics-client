@@ -5,11 +5,11 @@ import { BiLogIn } from "react-icons/bi";
 import { AppContext } from "../contexts/AppContext";
 import { FaUserCircle, FaShippingFast, FaPlus } from "react-icons/fa";
 import { Dropdown } from "antd";
-import { BsFillChatTextFill } from "react-icons/bs";
 import { IoMdClose } from "react-icons/io";
 import LiveChat from "../pages/liveChat";
+import ChatNoti from "../pages/liveChat/ChatNoti";
 const AppLayout = ({ children }) => {
-    const { user, userInfo, loadingUser, openChatBox, setOpenChatBox } =
+    const { user, userInfo, loadingUser, openChatBox, setOpenChatBox, onLogout } =
         useContext(AppContext);
     const menuItems = [
         {
@@ -21,7 +21,7 @@ const AppLayout = ({ children }) => {
             label: (
                 <div
                     onClick={() => {
-                        console.log("logout");
+                        onLogout()
                     }}
                 >
                     Logout
@@ -60,7 +60,7 @@ const AppLayout = ({ children }) => {
                     ) : (
                         <Link
                             to={"/login"}
-                            className="text-3xl py-2 px-4 hover:bg-blue-400 hover:text-white rounded-md cursor-pointer"
+                            className="flex items-center py-2 px-4 hover:bg-blue-400 hover:text-white rounded-md cursor-pointer"
                         >
                             <div className="mr-2">Login</div>
                             <BiLogIn />
@@ -79,7 +79,7 @@ const AppLayout = ({ children }) => {
                         }}
                         className="fixed bottom-2 right-2 cursor-pointer bg-blue-400 text-white p-2 rounded-full text-3xl hover:bg-blue-600"
                     >
-                        {openChatBox ? <IoMdClose /> : <BsFillChatTextFill />}
+                        {openChatBox ? <IoMdClose /> : <ChatNoti />}
                     </div>
                 </>
             }

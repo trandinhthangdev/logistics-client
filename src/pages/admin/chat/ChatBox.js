@@ -32,7 +32,7 @@ const ChatBox = (props) => {
     const [messageInput, setMessageInput] = useState("");
 
     useEffect(() => {
-        axios.get(`/api/users/${roomId}`)
+        axios.get(`/api/users/get-user/${roomId}`)
             .then(res => {
                 setUser(res.data)
             })

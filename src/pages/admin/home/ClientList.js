@@ -117,13 +117,8 @@ const ClientList = (props) => {
                 placeholder="Search..."
                 value={searchTextInput}
                 onChange={(e) => {
-                    // setData((prev) => ({
-                    //     ...prev,
-                    //     searchText: e.target.value,
-                    // }));
                     setSearchTextInput(e.target.value)
                 }}
-                // onSearch={handleSearch}
             />
             <Table
                 className="[&_td]:p-2"
@@ -138,7 +133,6 @@ const ClientList = (props) => {
                 })}
                 loading={loading}
             />
-            {/*{loading && <div className="p-2 flex items-center justify-center"><Spin /></div>}*/}
         </div>
     );
 };

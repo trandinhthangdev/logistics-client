@@ -77,12 +77,6 @@ const OrderList = (props) => {
             });
     };
 
-    const handleSearch = () => {
-        setData((prev) => ({
-            ...prev,
-            page: 0,
-        }));
-    };
     const observer = useRef();
     const lastEndRef = useCallback(
         (node) => {
@@ -229,13 +223,8 @@ const OrderList = (props) => {
                         className="max-w-[240px]"
                         value={searchTextInput}
                         onChange={(e) => {
-                            // setData((prev) => ({
-                            //     ...prev,
-                            //     searchText: e.target.value,
-                            // }));
                             setSearchTextInput(e.target.value)
                         }}
-                        // onSearch={handleSearch}
                     />
                 <Select
                      className="w-[120px]"
