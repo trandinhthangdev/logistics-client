@@ -55,7 +55,9 @@ const LoginForm = (props) => {
             .confirm(otp)
             .then(async (res) => {
                 setLoading(false);
-                onSuccess()
+                if (typeof onSuccess === 'function') {
+                    onSuccess()
+                }
             })
             .catch((err) => {
                 setLoading(false);
