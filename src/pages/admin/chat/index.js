@@ -15,10 +15,10 @@ const AdminChat = (props) => {
     }, [loading]);
     return (
         <div className="flex">
-            <div>
+            <div className="pr-2 border-r border-r-gray-300">
                 <ClientList />
             </div>
-            <div className="flex-1 h-[calc(100vh-120px)]">
+            <div className="flex-1 h-[calc(100vh-120px)] pl-2">
                 {!loading && <ChatBox roomId={roomId} />}
             </div>
         </div>

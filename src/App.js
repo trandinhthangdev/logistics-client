@@ -21,18 +21,12 @@ import { Toaster } from "react-hot-toast";
 import LoadingBg from "./components/LoadingBg";
 import AdminChat from "./pages/admin/chat";
 import AdminTrackingOrder from "./pages/admin/trackingOrder";
+import Page404 from "./pages/404";
+import ModalLogin from "./components/ModalLogin";
 
 function App() {
-    const { user, loadingUser, loading } = useContext(AppContext);
+    const { user, loadingUser, loading, isAdmin, isAuthModal, setIsAuthModal } = useContext(AppContext);
     const router = createBrowserRouter([
-        {
-            path: "/",
-            element: (
-                <AppLayout>
-                    <Home />
-                </AppLayout>
-            ),
-        },
         {
             path: "/new-order",
             element: (
@@ -87,6 +81,14 @@ function App() {
                                     </AppLayout>
                                 ),
                             },
+                          {
+                              path: "/",
+                              element: (
+                                  <AppLayout>
+                                      <Home />
+                                  </AppLayout>
+                              ),
+                          }
                         ]),
               ]
             : [
@@ -106,7 +108,23 @@ function App() {
                           </AppLayout>
                       ),
                   },
+                {
+                    path: "/",
+                    element: (
+                        <AppLayout>
+                            <Home />
+                        </AppLayout>
+                    ),
+                }
               ]),
+        {
+            path: "*",
+            element: isAdmin ? <AppAdminLayout>
+                <Page404 />
+            </AppAdminLayout> : <AppLayout>
+                <Page404 />
+            </AppLayout>
+        }
     ]);
     if (loadingUser) {
         return <></>;
@@ -116,6 +134,9 @@ function App() {
             <Toaster toastOptions={{ duration: 4000 }} />
             {loading && <LoadingBg />}
             <RouterProvider router={router} />
+            {isAuthModal && <ModalLogin open={true} onClose={() => {
+                setIsAuthModal(false)
+            }}/>}
         </>
     );
     // if (loadingUser) {

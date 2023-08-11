@@ -37,7 +37,7 @@ const AppLayout = ({ children }) => {
                 </Link>
                 <div className="flex items-center">
                     <Link to={"/new-order"}>
-                        <div className="mr-4 flex items-center bg-amber-600 text-white px-2 py-2 rounded-md">
+                        <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600 mr-4">
                             <FaPlus />
                             <div className="mx-1">Create Order</div>
                             <FaShippingFast className="text-2xl" />
@@ -69,15 +69,20 @@ const AppLayout = ({ children }) => {
                 </div>
             </div>
             <div className="p-4 mt-[80px]">{children}</div>
-            {openChatBox && <LiveChat onClose={() => setOpenChatBox(false)} />}
-            <div
-                onClick={() => {
-                    setOpenChatBox((prev) => !prev);
-                }}
-                className="fixed bottom-2 right-2 cursor-pointer bg-blue-400 text-white p-2 rounded-full text-3xl hover:bg-blue-600"
-            >
-                {openChatBox ? <IoMdClose /> : <BsFillChatTextFill />}
-            </div>
+            {
+                user &&
+                <>
+                    {openChatBox && <LiveChat onClose={() => setOpenChatBox(false)} />}
+                    <div
+                        onClick={() => {
+                            setOpenChatBox((prev) => !prev);
+                        }}
+                        className="fixed bottom-2 right-2 cursor-pointer bg-blue-400 text-white p-2 rounded-full text-3xl hover:bg-blue-600"
+                    >
+                        {openChatBox ? <IoMdClose /> : <BsFillChatTextFill />}
+                    </div>
+                </>
+            }
         </div>
     );
 };

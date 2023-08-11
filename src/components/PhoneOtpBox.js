@@ -72,7 +72,6 @@ const PhoneOtpBox = () => {
     return (
         <section className="bg-emerald-500 flex items-center justify-center h-screen">
             <div>
-                <Toaster toastOptions={{ duration: 4000 }} />
                 <div id="recaptcha-container"></div>
                 {user ? (
                     <h2 className="text-center text-white font-medium text-2xl">

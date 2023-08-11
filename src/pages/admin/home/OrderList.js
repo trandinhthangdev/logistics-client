@@ -1,15 +1,20 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Table, Input, Select } from "antd";
+import {Table, Input, Select, Spin} from "antd";
 import { FaEye } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { showAddressByKey } from "../../../utils/functions";
-import { OrderStatusEnum } from "../../../utils/contants";
+import {OrderStatusEnum, STATUSES} from "../../../utils/contants";
 import ChangeStatus from "../../../components/ChangeStatus";
+import LoadingProgress from "../../../components/LoadingProgress";
+import OrderNumber from "../../../components/OrderNumber";
+import {AiOutlineArrowRight} from "react-icons/ai"
+import {debounce} from "lodash";
 const { Option } = Select;
 
 const pageSize = 10;
 const OrderList = (props) => {
+    const [searchTextInput, setSearchTextInput] = useState("")
     const [data, setData] = useState({
         items: [],
         page: 0,
@@ -29,6 +34,24 @@ const OrderList = (props) => {
         }
         getData();
     }, [page]);
+    const debouncedSearch = useRef(
+        debounce(async (searchText) => {
+            setData((prev) => ({
+                ...prev,
+                page: 0,
+                searchText: searchText,
+            }));
+        }, 300)
+    ).current;
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel();
+        };
+    }, [debouncedSearch]);
+
+    useEffect(() => {
+        debouncedSearch(searchTextInput)
+    }, [searchTextInput])
 
     const getData = () => {
         if (!page) return;
@@ -45,7 +68,6 @@ const OrderList = (props) => {
                     .join("&")}`
             )
             .then((res) => {
-                console.log(res.data);
                 setData((prev) => ({
                     ...prev,
                     items: page === 1 ? res.data : [...prev.items, ...res.data],
@@ -86,13 +108,23 @@ const OrderList = (props) => {
             title: "Order Number",
             dataIndex: "orderNumber",
             key: "orderNumber",
+            render: (value) => {
+                return (
+                    <OrderNumber orderNumber={value}/>
+                )
+            }
         },
         {
             title: "Status",
             dataIndex: "status",
             key: "status",
             render: (value, record) => {
-                return <ChangeStatus data={record} />;
+                return <ChangeStatus data={record} onSuccess={() => {
+                    setData(prev => ({
+                        ...prev,
+                        page: 0
+                    }))
+                }} />;
             },
         },
         {
@@ -119,7 +151,7 @@ const OrderList = (props) => {
                     ward: record.senderAddressWard,
                 });
                 return (
-                    <div>
+                    <div className="italic">
                         <div>{`${province}, ${district}, ${ward}`}</div>
                         <div>{record.senderAddressDescription}</div>
                     </div>
@@ -150,7 +182,7 @@ const OrderList = (props) => {
                     ward: record.recipientAddressWard,
                 });
                 return (
-                    <div>
+                    <div className="italic">
                         <div>{`${province}, ${district}, ${ward}`}</div>
                         <div>{record.recipientAddressDescription}</div>
                     </div>
@@ -166,8 +198,8 @@ const OrderList = (props) => {
                     return (
                         <div ref={lastEndRef}>
                             <Link to={`/admin/tracking/${record.orderNumber}`}>
-                                <div className="cursor-pointer p-2 rounded-md text-white bg-amber-600">
-                                    Tracking
+                                <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
+                                    <AiOutlineArrowRight />
                                 </div>
                             </Link>
                         </div>
@@ -175,8 +207,8 @@ const OrderList = (props) => {
                 }
                 return (
                     <Link to={`/admin/tracking/${record.orderNumber}`}>
-                        <div className="cursor-pointer p-2 rounded-md text-white bg-amber-600">
-                            Tracking
+                        <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
+                            <AiOutlineArrowRight />
                         </div>
                     </Link>
                 );
@@ -188,40 +220,26 @@ const OrderList = (props) => {
             value: "",
             label: "All",
         },
-        {
-            value: OrderStatusEnum.PENDING,
-            label: "pending",
-        },
-        {
-            value: OrderStatusEnum.SHIPPED,
-            label: "shipped",
-        },
-        {
-            value: OrderStatusEnum.DELIVERED,
-            label: "delivered",
-        },
-        {
-            value: OrderStatusEnum.CANCELLED,
-            label: "cancelled",
-        },
+        ...STATUSES
     ];
     return (
         <div className="">
-            <div>
-                <Input.Search
-                    placeholder="Search..."
-                    enterButton="Search"
-                    value={searchText}
-                    onChange={(e) => {
-                        setData((prev) => ({
-                            ...prev,
-                            searchText: e.target.value,
-                        }));
-                    }}
-                    onSearch={handleSearch}
-                />
+            <div className="flex items-center justify-between pb-2">
+                    <Input.Search
+                        className="max-w-[240px]"
+                        value={searchTextInput}
+                        onChange={(e) => {
+                            // setData((prev) => ({
+                            //     ...prev,
+                            //     searchText: e.target.value,
+                            // }));
+                            setSearchTextInput(e.target.value)
+                        }}
+                        // onSearch={handleSearch}
+                    />
                 <Select
-                    placeholder="Select Province"
+                     className="w-[120px]"
+                    placeholder="Select status"
                     onChange={(value) => {
                         const prevFilters = { ...filters };
                         if (value) {
@@ -246,10 +264,11 @@ const OrderList = (props) => {
             <Table
                 dataSource={items}
                 columns={columns}
-                scroll={{ x: true, y: 300 }}
+                scroll={{ x: true, y: 'calc(100vh - 320px)' }}
                 pagination={false}
+                loading={loading}
             />
-            {loading && <div>loading</div>}
+            {/*{loading && <div className="p-2 flex items-center justify-center"><Spin /></div>}*/}
         </div>
     );
 };

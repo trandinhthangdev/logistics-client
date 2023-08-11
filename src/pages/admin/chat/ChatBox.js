@@ -19,15 +19,27 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { AppContext } from "../../../contexts/AppContext";
 import EmojiBtn from "./../../../components/EmojiBtn";
 import { app } from "../../../firebase.config";
+import axios from "axios";
 
 const db = getFirestore(app);
 
 const ChatBox = (props) => {
     const { onClose, roomId } = props;
     const boxRef = useRef(null);
-    const { user, loadingUser } = useContext(AppContext);
+    const {  loadingUser } = useContext(AppContext);
+    const [user, setUser] = useState(null)
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
+
+    useEffect(() => {
+        axios.get(`/api/users/${roomId}`)
+            .then(res => {
+                setUser(res.data)
+            })
+            .catch(err => {
+                console.log('err',err)
+            })
+    }, []);
     const handleKeyPress = (event) => {
         if (event.key === "Enter") {
             onSendMessage();
@@ -61,26 +73,20 @@ const ChatBox = (props) => {
             orderBy("timestamp")
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
+            console.log('A', snapshot.docs.length)
             setMessages(snapshot.docs.map((doc) => doc.data()));
         });
         return unsubscribe;
     }, []);
-    console.log("roomId", roomId);
 
     return (
         <div className="h-full flex flex-col">
             <div className="flex items-center p-2">
-                <div className="font-bold flex-1 text-xl">Chat with us</div>
-                <div
-                    className="text-xl hover:text-blue-600 cursor-pointer"
-                    onClick={() => onClose()}
-                >
-                    <IoMdClose />
-                </div>
+                <div className="font-bold flex-1 text-xl">Chat with {user?.name ?? ""}</div>
             </div>
-            <div className="p-2 flex-1 h-[calc(100%-100px)]">
+            <div className="p-2 flex-1 h-[calc(100%-100px)] flex flex-col justify-end">
                 <div
-                    className="h-full border border-gray-100 p-2 overflow-y-auto"
+                    className="max-h-full border border-gray-100 p-2 overflow-y-auto "
                     ref={boxRef}
                 >
                     {messages.map((item, index) => {
@@ -92,11 +98,16 @@ const ChatBox = (props) => {
                                         : "justify-end"
                                 }`}
                             >
-                                <Tooltip
-                                    title={moment(item.createdAt).format("LLL")}
-                                >
+                                {/*<Tooltip*/}
+                                {/*    title={moment(item.createdAt).format("LLL")}*/}
+                                {/*>*/}
+                                <div className={`flex flex-col ${
+                                    !item.isAdmin
+                                        ? "items-start"
+                                        : "items-end"
+                                }`}>
                                     <div
-                                        className={`rounded-2xl p-2 ${
+                                        className={`rounded-2xl p-2 text-md ${
                                             !item.isAdmin
                                                 ? "bg-gray-100 text-gray-800"
                                                 : "bg-blue-600 text-white"
@@ -104,7 +115,11 @@ const ChatBox = (props) => {
                                     >
                                         {item.text}
                                     </div>
-                                </Tooltip>
+                                    <div className="text-xs italic text-gray-400">
+                                        {moment(item.createdAt).format("LLL")}
+                                    </div>
+                                </div>
+                                {/*</Tooltip>*/}
                             </div>
                         );
                     })}

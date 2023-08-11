@@ -40,7 +40,6 @@ const Profile = (props) => {
         district: data?.addressDistrict,
     });
     const onFinish = (values) => {
-        console.log("Form values:", values);
         setLoading(true);
         axios
             .post("/api/users/save-me", {

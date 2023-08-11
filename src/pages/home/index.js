@@ -1,10 +1,15 @@
-import React, {useCallback, useEffect, useRef, useState} from "react";
+import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {Table, Input} from "antd";
-import {FaEye} from "react-icons/fa"
+import {FaEye, FaPlus, FaShippingFast} from "react-icons/fa"
 import {Link} from "react-router-dom";
+import {debounce} from "lodash";
+import {AppContext} from "../../contexts/AppContext";
+import {BiLogIn} from "react-icons/bi";
 const pageSize = 10;
 const Home = (props) => {
+    const { user, setIsAuthModal } = useContext(AppContext);
+    const [searchTextInput, setSearchTextInput] = useState("")
     const [data, setData] = useState({
         items: [],
         page: 0,
@@ -20,6 +25,24 @@ const Home = (props) => {
         loading
     } = data;
 
+    const debouncedSearch = useRef(
+        debounce(async (searchText) => {
+            setData((prev) => ({
+                ...prev,
+                page: 0,
+                searchText: searchText,
+            }));
+        }, 300)
+    ).current;
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel();
+        };
+    }, [debouncedSearch]);
+
+    useEffect(() => {
+        debouncedSearch(searchTextInput)
+    }, [searchTextInput])
     useEffect(() => {
         if (!page) {
             setData(prev => ({
@@ -46,11 +69,12 @@ const Home = (props) => {
                     hasMore: res.data.length === pageSize,
                     loading: false
                 }))
-            })
+            }).catch(err => {
+            console.log('err',err)
+        })
     }
 
     const handleSearch = () => {
-        console.log('handleSearch',searchText)
         setData(prev => ({
             ...prev,
             page: 0
@@ -155,29 +179,49 @@ const Home = (props) => {
             }
         },
     ];
-    console.log('items', items)
-    return <div className="">
-        <Input.Search
-            placeholder="Search..."
-            enterButton="Search"
-            value={searchText}
-            onChange={(e) => {
-                setData(prev => ({
-                    ...prev,
-                    searchText: e.target.value
-                }))
-            }}
-            onSearch={handleSearch}
-        />
-        <Table
-            dataSource={items}
-            columns={columns}
-            scroll={{ x: true, y: 300 }}
-            pagination={false}
-        />
-        {loading && <div>
-            loading
-        </div>}
+    return <div className="flex flex-col items-center">
+        <div className="font-bold text-2xl">
+            TDT Logistics
+        </div>
+        <div className="max-w-[1200px]">
+            Discover seamless logistics at its best with TDT Logistics. Streamline your supply chain with our expert transportation management, state-of-the-art warehousing, and supply chain consulting services. Our platform offers real-time tracking, customs expertise, and technology integration for optimal efficiency. Trust in our reliability, global reach, and customer-centric approach to elevate your business operations. Experience the power of tailored solutions that adapt to your needs while benefiting from our industry insights. Choose TDT Logistics today and revolutionize your logistics experience.
+        </div>
+        {
+            user
+            ?
+                <>
+                    <div className="flex justify-center p-2">
+                        <Input.Search
+                            className="max-w-[240px]"
+                            value={searchTextInput}
+                            onChange={(e) => {
+                                // setData((prev) => ({
+                                //     ...prev,
+                                //     searchText: e.target.value,
+                                // }));
+                                setSearchTextInput(e.target.value)
+                            }}
+                            // onSearch={handleSearch}
+                        />
+                    </div>
+                    <Table
+                        dataSource={items}
+                        columns={columns}
+                        scroll={{ x: true, y: '100%' }}
+                        pagination={false}
+                        loading={loading}
+                    />
+                </>
+                :
+                <div className="p-4">
+                    <div onClick={() => {
+                        setIsAuthModal(true);
+                    }} className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600 mr-4">
+                        <div className="mr-1">Login</div>
+                        <BiLogIn />
+                    </div>
+                </div>
+        }
     </div>;
 };
 export default Home;

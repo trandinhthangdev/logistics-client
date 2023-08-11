@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import axios from "axios";
-import { Table, Input } from "antd";
-import { FaEye } from "react-icons/fa";
+import {Table, Input, Spin} from "antd";
 import { Link, useNavigate } from "react-router-dom";
-import CLientItem from "./ClientItem";
+import ClientItem from "./ClientItem";
+import {debounce} from "lodash"
 const pageSize = 10;
 const ClientList = (props) => {
     const navigate = useNavigate();
+    const [searchTextInput, setSearchTextInput] = useState("")
     const [data, setData] = useState({
         items: [],
         page: 0,
@@ -27,6 +28,25 @@ const ClientList = (props) => {
         getData();
     }, [page]);
 
+    const debouncedSearch = useRef(
+        debounce(async (searchText) => {
+            setData((prev) => ({
+                ...prev,
+                page: 0,
+                searchText: searchText,
+            }));
+        }, 300)
+    ).current;
+    useEffect(() => {
+        return () => {
+            debouncedSearch.cancel();
+        };
+    }, [debouncedSearch]);
+
+    useEffect(() => {
+        debouncedSearch(searchTextInput)
+    }, [searchTextInput])
+
     const getData = () => {
         if (!page) return;
         setData((prev) => ({
@@ -38,7 +58,6 @@ const ClientList = (props) => {
                 `/api/users?page=${page}&limit=${pageSize}&search=${searchText.trim()}`
             )
             .then((res) => {
-                console.log(res.data);
                 setData((prev) => ({
                     ...prev,
                     items: page === 1 ? res.data : [...prev.items, ...res.data],
@@ -54,6 +73,8 @@ const ClientList = (props) => {
             page: 0,
         }));
     };
+
+
     const observer = useRef();
     const lastEndRef = useCallback(
         (node) => {
@@ -80,53 +101,44 @@ const ClientList = (props) => {
             dataIndex: "name",
             key: "name",
             render: (value, record, index) => {
-                console.log("record", record);
-                return <CLientItem name={record.name} uid={record.uid} />;
+                if (index === items.length - 1) {
+                    return <div ref={lastEndRef}>
+                        <ClientItem name={record.name} uid={record.uid}/>
+                    </div>;
+                } else {
+                    return <ClientItem name={record.name} uid={record.uid}/>;
+                }
             },
-        },
-
-        // {
-        //     title: "",
-        //     dataIndex: "action",
-        //     key: "action",
-        //     render: (value, record, index) => {
-        //         return (
-        //             <Link to={`/detail-order/${record.orderNumber}`}>
-        //                 <div className="cursor-pointer p-2 rounded-md text-white bg-amber-600">
-        //                     <FaEye />
-        //                 </div>
-        //             </Link>
-        //         );
-        //     },
-        // },
+        }
     ];
-    console.log("items", items);
     return (
-        <div className="max-w-[360px]">
+        <div className="w-[360px] max-md:w-[240px]">
             <Input.Search
                 placeholder="Search..."
-                enterButton="Search"
-                value={searchText}
+                value={searchTextInput}
                 onChange={(e) => {
-                    setData((prev) => ({
-                        ...prev,
-                        searchText: e.target.value,
-                    }));
+                    // setData((prev) => ({
+                    //     ...prev,
+                    //     searchText: e.target.value,
+                    // }));
+                    setSearchTextInput(e.target.value)
                 }}
-                onSearch={handleSearch}
+                // onSearch={handleSearch}
             />
             <Table
+                className="[&_td]:p-2"
                 dataSource={items}
                 columns={columns}
-                scroll={{ x: true, y: 300 }}
+                scroll={{ x: true, y: 'calc(100vh - 90px)' }}
                 pagination={false}
                 onRow={(record) => ({
                     onClick: () => {
                         navigate(`/admin/chat?roomId=${record.uid}`);
                     },
                 })}
+                loading={loading}
             />
-            {loading && <div>loading</div>}
+            {/*{loading && <div className="p-2 flex items-center justify-center"><Spin /></div>}*/}
         </div>
     );
 };

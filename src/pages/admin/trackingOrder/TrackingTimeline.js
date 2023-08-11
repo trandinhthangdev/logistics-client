@@ -1,0 +1,80 @@
+import React, {useContext, useEffect, useState} from "react";
+import {collection, getFirestore, onSnapshot, orderBy, query, where} from "firebase/firestore";
+import {FaPlus, FaRoute} from "react-icons/fa"
+import {app} from "../../../firebase.config";
+import {Modal, Popover, Select} from "antd";
+import {POST_OFFICE, POST_OFFICE_LIST} from "../../../utils/contants";
+import ModalAddRoute from "./ModalAddRoute";
+import moment from "moment";
+import {MdLocationOn} from "react-icons/md"
+import {AppContext} from "../../../contexts/AppContext";
+
+const db = getFirestore(app);
+const TrackingTimeline = (props) => {
+    const {
+        orderNumber
+    } = props;
+    const { isAdmin } = useContext(AppContext);
+    const [routes, setRoutes] = useState([]);
+    const [isOpenAdd, setIsOpenAdd] = useState(false);
+    useEffect(() => {
+        const q = query(collection(db, 'routes'), where('orderNumber','==', orderNumber),orderBy('timestamp'))
+        const unsubscribe = onSnapshot(q, snapshot => {
+            setRoutes(snapshot.docs.map(doc => doc.data()))
+        })
+        return unsubscribe;
+    }, []);
+
+    return (
+        <div className="flex flex-col items-center p-2">
+            {isAdmin && <div  onClick={() => {
+                setIsOpenAdd(true)
+            }} className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
+                <FaPlus />
+                <div className="mx-1">Add route</div>
+                <FaRoute />
+            </div>}
+            <div>
+                {
+                    routes.map(item => {
+                        return (
+                            <div className="flex items-center p-2 border-b border-b-gray-300 mb-2">
+                                <div className="flex-1">
+                                    <div className="text-sm italic">
+                                        {item.timestamp?.seconds ? moment.unix(item.timestamp.seconds).calendar() : ''}
+                                    </div>
+                                    <div className="font-bold">
+                                        {POST_OFFICE[item.postoffice].locationName}
+                                    </div>
+                                    <div className="text-sm">
+                                        {POST_OFFICE[item.postoffice].address}
+                                    </div>
+                                </div>
+                                <Popover
+                                    content={
+                                        <div dangerouslySetInnerHTML={{__html: POST_OFFICE[item.postoffice].iframeMap}}>
+
+                                        </div>
+                                    }
+                                >
+                                    <div className="bg-orange-400 text-white p-2 rounded-full cursor-pointer">
+                                        <MdLocationOn />
+                                    </div>
+                                </Popover>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+            {isOpenAdd && <ModalAddRoute
+                open={isOpenAdd}
+                onClose={() => {
+                    setIsOpenAdd(false)
+                }}
+                orderNumber={orderNumber}
+            />}
+        </div>
+    )
+}
+
+export default TrackingTimeline;

@@ -55,7 +55,6 @@ const LiveChat = (props) => {
         })
         return unsubscribe;
     }, []);
-    console.log('messages', messages)
 
     return <div className="fixed bottom-2 right-[60px] w-[400px] max-w-[calc(100vw-80px)] h-[480px] max-h-[calc(100vh-80px)] bg-white z-[999] shadow-2xl rounded-md p-2 flex flex-col">
         <div className="flex items-center p-2">

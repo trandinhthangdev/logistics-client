@@ -4,11 +4,11 @@ import StatisBox from "./StatisBox";
 import OrderList from "./OrderList";
 const AdminHome = (props) => {
     return (
-        <div className="flex">
-            <div>
+        <div className="flex w-full">
+            <div className="pr-2 border-r border-r-gray-300">
                 <ClientList />
             </div>
-            <div className="flex-1 h-[calc(100vh-120px)]">
+            <div className="flex-1 h-[calc(100vh-150px)] pl-2">
                 <StatisBox />
                 <OrderList />
             </div>

@@ -8,21 +8,39 @@ export const OrderStatusEnum = Object.freeze({
 });
 
 export const ADDRESS_VN = require("./../backoffice/addressvn.json");
+
+export const labelByStatus = {
+    [OrderStatusEnum.PENDING]: "Pending",
+    [OrderStatusEnum.SHIPPED]: "Shipped",
+    [OrderStatusEnum.DELIVERED]: "Delivered",
+    [OrderStatusEnum.CANCELLED]: "Cancelled"
+}
 export const STATUSES = [
     {
         value: OrderStatusEnum.PENDING,
-        label: "pending",
+        label: labelByStatus[OrderStatusEnum.PENDING],
     },
     {
         value: OrderStatusEnum.SHIPPED,
-        label: "shipped",
+        label: labelByStatus[OrderStatusEnum.SHIPPED],
     },
     {
         value: OrderStatusEnum.DELIVERED,
-        label: "delivered",
+        label: labelByStatus[OrderStatusEnum.DELIVERED],
     },
     {
         value: OrderStatusEnum.CANCELLED,
-        label: "cancelled",
+        label: labelByStatus[OrderStatusEnum.CANCELLED],
     },
 ];
+
+export const POST_OFFICE = require('./../backoffice/postoffice.json')
+
+export const POST_OFFICE_LIST = Object.keys(POST_OFFICE).map(code => POST_OFFICE[code])
+
+export const colorByStatus = {
+    [OrderStatusEnum.PENDING]: 'bg-yellow-300',
+    [OrderStatusEnum.SHIPPED]: "bg-green-300",
+    [OrderStatusEnum.DELIVERED]: "bg-blue-300",
+    [OrderStatusEnum.CANCELLED]: "bg-red-300"
+}

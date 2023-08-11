@@ -1,7 +1,7 @@
 import React from "react";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "./../firebase.config";
-import { getDatabase, ref, child, get } from "firebase/database";
+import { getAuth, signOut } from "firebase/auth";
 import axios from "axios";
 export const AppContext = createContext({});
 
@@ -12,6 +12,7 @@ const AppContextProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [openChatBox, setOpenChatBox] = useState(false);
     const [isAuthModal, setIsAuthModal] = useState(false);
+
 
     useEffect(() => {
         if (user && !user?.email) {
@@ -32,7 +33,6 @@ const AppContextProvider = ({ children }) => {
         // Set up an authentication observer to track the user's sign-in state.
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
-                console.log("user", user);
                 axios.defaults.headers.accessToken = user.accessToken;
                 // User is signed in.
                 setUser(user);
@@ -46,6 +46,18 @@ const AppContextProvider = ({ children }) => {
         // Unsubscribe from the observer when the component is unmounted.
         return () => unsubscribe();
     }, []);
+
+    const onLogout = () => {
+        signOut(auth).then(() => {
+            // Sign-out successful.
+            setUser(null);
+            setUserInfo(null)
+        }).catch((error) => {
+            // An error happened.
+        });
+
+    }
+    const isAdmin = !!user?.email;
     const appContextData = {
         user,
         setUser,
@@ -59,6 +71,8 @@ const AppContextProvider = ({ children }) => {
         setIsAuthModal,
         userInfo,
         setUserInfo,
+        isAdmin,
+        onLogout
     };
     return (
         <AppContext.Provider value={appContextData}>

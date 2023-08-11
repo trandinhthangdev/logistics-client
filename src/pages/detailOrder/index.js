@@ -12,9 +12,10 @@ const DetailOrder = (props) => {
 
     useEffect(() => {
         axios.get(`/api/orders/${orderNumber}`).then((res) => {
-            console.log(res.data);
             setData(res.data);
-        });
+        }).catch(err => {
+            console.log('err',err)
+        })
     }, []);
     if (!data) {
         return <></>;

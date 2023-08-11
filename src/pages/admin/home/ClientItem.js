@@ -14,12 +14,16 @@ import {
     limit,
 } from "firebase/firestore";
 import { app } from "../../../firebase.config";
+import {useLocation} from "react-router-dom";
+import {Tooltip} from "antd";
 
 const db = getFirestore(app);
 
-const CLientItem = (props) => {
+const ClientItem = (props) => {
+    const { search } = useLocation();
+    const queryParams = new URLSearchParams(search);
+    const roomId = queryParams.get("roomId");
     const { uid, name } = props;
-    console.log("uid", uid);
     const [newMessage, setNewMessage] = useState(null);
     useEffect(() => {
         const q = query(
@@ -37,11 +41,16 @@ const CLientItem = (props) => {
         return unsubscribe;
     }, [uid]);
     return (
-        <div>
-            <div>{name}</div>
-            {newMessage && <div>{newMessage.text}</div>}
-        </div>
+        <Tooltip title="Go to chat">
+            <div className={`cursor-pointer p-2 ${roomId === uid ? 'bg-gray-200' : ''}`}>
+                <div className="font-bold">{name}</div>
+                {newMessage &&
+                    <div>
+                        <div className="italic text-sm">{newMessage.text}</div>
+                    </div>}
+            </div>
+        </Tooltip>
     );
 };
 
-export default CLientItem;
+export default ClientItem;

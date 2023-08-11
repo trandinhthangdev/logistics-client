@@ -11,7 +11,7 @@ import {BsFillChatTextFill} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 
 const AppAdminLayout = ({children}) => {
-    const { user, loadingUser } = useContext(AppContext);
+    const { user, onLogout } = useContext(AppContext);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -24,7 +24,8 @@ const AppAdminLayout = ({children}) => {
             key: '1',
             label: (
                 <div onClick={() => {
-                    console.log('logout')
+                    onLogout()
+                    navigate(("/"))
                 }}>
                     Logout
                 </div>
@@ -35,7 +36,7 @@ const AppAdminLayout = ({children}) => {
     return (
         <div className="flex flex-col">
             <div className="h-[80px] flex items-center justify-between px-2 shadow-md fixed top-0 left-0 right-0 z-10 bg-white">
-                <Link to={"/"}>
+                <Link to={"/admin"}>
                     <img className="h-[60px]" src={LogoIcon}/>
                 </Link>
                 <div className="flex items-center">
@@ -46,7 +47,7 @@ const AppAdminLayout = ({children}) => {
                             <Dropdown menu={{
                                 items: menuItems
                             }}>
-                                <div className="flex items-center">
+                                <div className="flex items-center cursor-pointer">
                                     <div className="mr-2">
                                         {user?.email}
                                     </div>
