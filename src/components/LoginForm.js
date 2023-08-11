@@ -9,6 +9,9 @@ import {AppContext} from "../contexts/AppContext";
 import 'react-phone-input-2/lib/style.css'
 
 const LoginForm = (props) => {
+    const {
+        onSuccess
+    } = props;
     const [otp, setOtp] = useState("");
     const [phone, setPhone] = useState("");
     const { user, setIsAuthModal, setLoading } = useContext(AppContext);
@@ -52,9 +55,9 @@ const LoginForm = (props) => {
             .confirm(otp)
             .then(async (res) => {
                 setLoading(false);
+                onSuccess()
             })
             .catch((err) => {
-                console.log(err);
                 setLoading(false);
             });
     }
