@@ -1,7 +1,6 @@
 import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
 import axios from "axios";
 import {Table, Input, Select} from "antd";
-import {FaEye, FaPlus, FaShippingFast} from "react-icons/fa"
 import {Link} from "react-router-dom";
 import {debounce} from "lodash";
 import {AppContext} from "../../contexts/AppContext";
@@ -11,10 +10,12 @@ import ChangeStatus from "../../components/ChangeStatus";
 import {showAddressByKey} from "../../utils/functions";
 import {AiOutlineArrowRight} from "react-icons/ai";
 import {STATUSES} from "../../utils/contants";
+import {useTranslation} from "react-i18next";
 const { Option } = Select;
 
 const pageSize = 10;
 const Home = (props) => {
+    const {t,} = useTranslation();
     const { user, setIsAuthModal } = useContext(AppContext);
     const [searchTextInput, setSearchTextInput] = useState("")
     const [data, setData] = useState({
@@ -105,7 +106,7 @@ const Home = (props) => {
 
     const columns = [
         {
-            title: "Order Number",
+            title: t('order.label.orderNumber'),
             dataIndex: "orderNumber",
             key: "orderNumber",
             render: (value) => {
@@ -115,7 +116,7 @@ const Home = (props) => {
             }
         },
         {
-            title: "Status",
+            title: t('order.label.status'),
             dataIndex: "status",
             key: "status",
             render: (value, record) => {
@@ -128,7 +129,7 @@ const Home = (props) => {
             },
         },
         {
-            title: "Sender",
+            title: t('order.label.sender'),
             dataIndex: "senderInfo",
             key: "senderInfo",
             render: (value, record) => {
@@ -141,7 +142,7 @@ const Home = (props) => {
             },
         },
         {
-            title: "Sender Address",
+            title: t('order.label.senderAddress'),
             dataIndex: "senderAddress",
             key: "senderAddress",
             render: (value, record) => {
@@ -159,7 +160,7 @@ const Home = (props) => {
             },
         },
         {
-            title: "Recipient",
+            title: t('order.label.recipient'),
             dataIndex: "recipientInfo",
             key: "recipientInfo",
             render: (value, record) => {
@@ -172,7 +173,7 @@ const Home = (props) => {
             },
         },
         {
-            title: "Recipient Address",
+            title: t('order.label.recipientAddress'),
             dataIndex: "recipientAddress",
             key: "recipientAddress",
             render: (value, record) => {
@@ -218,16 +219,18 @@ const Home = (props) => {
     const statusOptions = [
         {
             value: "",
-            label: "All",
+            label: t('label.all'),
         },
         ...STATUSES
     ];
+
+    console.log('t',t('home.description'))
     return <div className="flex flex-col items-center">
         <div className="font-bold text-2xl">
-            TDT Logistics
+            {t('home.name')}
         </div>
-        <div className="max-w-[1200px]">
-            Discover seamless logistics at its best with TDT Logistics. Streamline your supply chain with our expert transportation management, state-of-the-art warehousing, and supply chain consulting services. Our platform offers real-time tracking, customs expertise, and technology integration for optimal efficiency. Trust in our reliability, global reach, and customer-centric approach to elevate your business operations. Experience the power of tailored solutions that adapt to your needs while benefiting from our industry insights. Choose TDT Logistics today and revolutionize your logistics experience.
+        <div className="max-w-[1200px] text-center">
+            {t('home.description')}
         </div>
         {
             user
@@ -236,6 +239,7 @@ const Home = (props) => {
                     <div className="w-full flex items-center justify-between pb-2">
                         <Input.Search
                             className="max-w-[240px]"
+                            placeholder={t('label.searchPlaceholder')}
                             value={searchTextInput}
                             onChange={(e) => {
                                 setSearchTextInput(e.target.value)
@@ -243,7 +247,7 @@ const Home = (props) => {
                         />
                         <Select
                             className="w-[120px]"
-                            placeholder="Select status"
+                            placeholder={t('label.selectStatus')}
                             onChange={(value) => {
                                 const prevFilters = { ...filters };
                                 if (value) {
@@ -265,23 +269,21 @@ const Home = (props) => {
                             })}
                         </Select>
                     </div>
-                    <div className="h-[calc(100vh-300px)]">
-                        <Table
-                            className="h-full"
-                            dataSource={items}
-                            columns={columns}
-                            scroll={{ x: true, y: 500 }}
-                            pagination={false}
-                            loading={loading}
-                        />
-                    </div>
+                    <Table
+                        className="h-full"
+                        dataSource={items}
+                        columns={columns}
+                        scroll={{ x: true, y: 500 }}
+                        pagination={false}
+                        loading={loading}
+                    />
                 </>
                 :
                 <div className="p-4">
                     <div onClick={() => {
                         setIsAuthModal(true);
                     }} className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600 mr-4">
-                        <div className="mr-1">Login</div>
+                        <div className="mr-1">{t('label.login')}</div>
                         <BiLogIn />
                     </div>
                 </div>

@@ -18,8 +18,8 @@ export const renderStatusLabel = (statusCode) => {
 export const showAddressByKey = ({ province, district, ward }) => {
     try {
         return {
-            province: ADDRESS_VN[province],
-            district: ADDRESS_VN[province].district[district],
+            province: ADDRESS_VN[province].name,
+            district: ADDRESS_VN[province].district[district].name,
             ward: ADDRESS_VN[province].district[district].wards[ward],
         };
     } catch (e) {

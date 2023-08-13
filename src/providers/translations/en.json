@@ -1,0 +1,90 @@
+{
+  "home": {
+    "name": "TDT Logistics",
+    "description": "Discover seamless logistics at its best with TDT Logistics. Streamline your supply chain with our expert transportation management, state-of-the-art warehousing, and supply chain consulting services. Our platform offers real-time tracking, customs expertise, and technology integration for optimal efficiency. Trust in our reliability, global reach, and customer-centric approach to elevate your business operations. Experience the power of tailored solutions that adapt to your needs while benefiting from our industry insights. Choose TDT Logistics today and revolutionize your logistics experience."
+  },
+  "label": {
+    "all": "All",
+    "searchPlaceholder": "Search ...",
+    "selectStatus": "Select status",
+    "login": "Login",
+    "backHome": "Back Home",
+    "404_description": "Sorry, the page you visited does not exist.",
+    "profile": "Profile",
+    "submit": "Submit",
+    "createOrder": "Create order",
+    "select_province": "Select Province",
+    "select_district": "Select District",
+    "select_ward": "Select Ward",
+    "send": "Send",
+    "client": "Client",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "phone": "Phone",
+    "address": "Address",
+    "postoffice": "Post office",
+    "addRoute": "Add route",
+    "enterOtp": "Enter your OTP",
+    "verifyOrp": "Verify OTP",
+    "verifyPhone": "Verify your phone number",
+    "sendCodeViaSMS": "Send code via SMS"
+  },
+  "toast": {
+    "updateProfile_success": "Update profile successfully",
+    "createOrder_success": "Create Order successfully!",
+    "copyOrderNumber_success": "Order number copied ({{orderNumber}})",
+    "sendOtp_success": "OTP sent successfully!"
+  },
+  "form_rule": {
+    "name_required": "Please input your name!",
+    "province_required": "Please select a province!",
+    "district_required": "Please select a district!",
+    "ward_required": "Please select a ward!",
+    "senderName_required": "Please enter sender name!",
+    "senderPhone_required": "Please enter sender phone!",
+    "phone_valid": "Please enter a valid phone number in Vietnam!",
+    "recipientName_required": "Please enter recipient name!",
+    "recipientPhone_required": "Please enter recipient phone!",
+    "email_required": "Please enter your email!",
+    "email_valid": "Please enter a valid email!",
+    "password_valid": "Please enter your password!",
+    "postoffice_required": "Please select postoffice!",
+    "searchToSelect": "Search to Select"
+  },
+  "order": {
+    "label": {
+      "orderNumber": "Order Number",
+      "status": "Status",
+      "sender": "Sender",
+      "senderAddress": "Sender Address",
+      "recipient": "Recipient",
+      "recipientAddress": "Recipient Address",
+      "senderName": "Sender name",
+      "senderPhone": "Sender phone",
+      "recipientName": "Recipient Name",
+      "recipientPhone": "Recipient Phone",
+      "shippingDate": "Shipping date",
+      "expectedDeliveryDate": "expected Delivery Date"
+    }
+
+  },
+  "user": {
+    "label": {
+      "name": "Name",
+      "phone": "Phone",
+      "address": "Address"
+    }
+  },
+  "chat": {
+    "chat_with": "Chat with {{roomName}}",
+    "inputMes_placeholder": "Enter your message",
+    "goToChat": "Go to chat"
+  },
+  "status": {
+    "pending": "Pending",
+    "shipped": "Shipped",
+    "delivered": "Delivered",
+    "cancelled": "Cancelled"
+  }
+}

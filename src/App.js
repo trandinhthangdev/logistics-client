@@ -1,6 +1,5 @@
 import logo from "./logo.svg";
 import "./App.css";
-import PhoneOtpBox from "./components/PhoneOtpBox";
 import React, { useContext, useEffect, useState } from "react";
 import { AppContext } from "./contexts/AppContext";
 import {

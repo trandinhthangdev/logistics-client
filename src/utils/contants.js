@@ -44,3 +44,9 @@ export const colorByStatus = {
     [OrderStatusEnum.DELIVERED]: "bg-blue-300",
     [OrderStatusEnum.CANCELLED]: "bg-red-300"
 }
+
+export const LANGUAGE_EN = 'en';
+export const LANGUAGE_VI = 'vi'
+
+export const SUPPORTED_LOCALES = [LANGUAGE_EN, LANGUAGE_VI]
+export const LOCAL_LANGUAGE = process.env.REACT_APP_LANGUAGE_LOCAL_STORAGE

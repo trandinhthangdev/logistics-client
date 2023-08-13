@@ -8,6 +8,7 @@ import { Dropdown } from "antd";
 import { IoMdClose } from "react-icons/io";
 import LiveChat from "../pages/liveChat";
 import ChatNoti from "../pages/liveChat/ChatNoti";
+import ChangeLanguage from "./ChangeLanguage";
 const AppLayout = ({ children }) => {
     const { user, userInfo, loadingUser, openChatBox, setOpenChatBox, onLogout } =
         useContext(AppContext);
@@ -43,6 +44,7 @@ const AppLayout = ({ children }) => {
                             <FaShippingFast className="text-2xl" />
                         </div>
                     </Link>
+                    <ChangeLanguage />
                     {user ? (
                         <Dropdown
                             menu={{

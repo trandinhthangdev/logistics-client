@@ -9,6 +9,7 @@ import LiveChat from "../pages/liveChat";
 import {IoMdClose} from "react-icons/io";
 import {BsFillChatTextFill} from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import ChangeLanguage from "./ChangeLanguage";
 
 const AppAdminLayout = ({children}) => {
     const { user, onLogout } = useContext(AppContext);
@@ -39,8 +40,8 @@ const AppAdminLayout = ({children}) => {
                 <Link to={"/admin"}>
                     <img className="h-[60px]" src={LogoIcon}/>
                 </Link>
-                <div className="flex items-center">
-
+                <div className="flex items-center justify-end">
+                    <ChangeLanguage />
                     {
                         user
                             ?

@@ -5,10 +5,12 @@ import axios from "axios";
 import { AppContext } from "../contexts/AppContext";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const { Option } = Select;
 
 const FormOrder = () => {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const { userInfo, user, setLoading, setIsAuthModal } = useContext(AppContext);
     const formRef = useRef(null);
@@ -111,7 +113,7 @@ const FormOrder = () => {
         <div className="flex flex-col items-center">
             <div className="w-[600px] max-w-[calc(100vw-40px)]">
                 <div className="font-bold text-2xl mb-2 text-center">
-                    Create Order
+                    {t('label.createOrder')}
                 </div>
                 <Form
                     name="FormOrder"
@@ -121,36 +123,35 @@ const FormOrder = () => {
                     ref={formRef}
                 >
                     <Form.Item
-                        label="Sender Name"
+                        label={t('order.label.senderName')}
                         name="senderName"
                         rules={[
                             {
                                 required: true,
-                                message: "Please enter sender name",
+                                message: t('form_rule.senderName_required')
                             },
                         ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="Sender Phone"
+                        label={t('order.label.senderPhone')}
                         name="senderPhone"
                         rules={[
                             {
                                 required: true,
-                                message: "Please enter sender phone",
+                                message: t('form_rule.senderPhone_required')
                             },
                             {
                                 pattern:
                                     /(\+84|84|0[3|5|7|8|9])+([0-9]{8,9})\b/,
-                                message:
-                                    "Please enter a valid phone number in Vietnam!",
+                                message: t('form_rule.phone_valid')
                             },
                         ]}
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Sender Address">
+                    <Form.Item label={t('order.label.senderAddress')}>
                         <Row gutter={16}>
                             <Col span={8}>
                                 <Form.Item
@@ -158,12 +159,12 @@ const FormOrder = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select province",
+                                            message: t('form_rule.province_required')
                                         },
                                     ]}
                                 >
                                     <Select
-                                        placeholder="Select Province"
+                                        placeholder={t('label.select_province')}
                                         onChange={(value) => {
                                             setAddress((prev) => ({
                                                 ...prev,
@@ -191,12 +192,12 @@ const FormOrder = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select district",
+                                            message: t('form_rule.district_required')
                                         },
                                     ]}
                                 >
                                     <Select
-                                        placeholder="Select District"
+                                        placeholder={t('label.select_district')}
                                         onChange={(value) => {
                                             setAddress((prev) => ({
                                                 ...prev,
@@ -223,12 +224,14 @@ const FormOrder = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select ward",
+                                            message: t('form_rule.ward_required')
                                         },
                                     ]}
                                     required
                                 >
-                                    <Select placeholder="Select Ward">
+                                    <Select
+                                        placeholder={t('label.select_ward')}
+                                    >
                                         {senderWards.map((item) => {
                                             return (
                                                 <Option value={item.key}>
@@ -245,36 +248,37 @@ const FormOrder = () => {
                         </Form.Item>
                     </Form.Item>
                     <Form.Item
-                        label="Recipient Name"
+                        label={t('order.label.recipientName')}
                         name="recipientName"
                         rules={[
                             {
                                 required: true,
-                                message: "Please enter recipient name",
+                                message: t('form_rule.recipientName_required'),
                             },
                         ]}
                     >
                         <Input />
                     </Form.Item>
                     <Form.Item
-                        label="Recipient Phone"
+                        label={t('order.label.recipientPhone')}
                         name="recipientPhone"
                         rules={[
                             {
                                 required: true,
-                                message: "Please enter recipient phone",
+                                message: t('form_rule.recipientPhone_required'),
                             },
                             {
                                 pattern:
                                     /(\+84|84|0[3|5|7|8|9])+([0-9]{8,9})\b/,
-                                message:
-                                    "Please enter a valid phone number in Vietnam!",
+                                message: t('form_rule.phone_valid'),
                             },
                         ]}
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item label="Recipient Address">
+                    <Form.Item
+                        label={t('order.label.recipientAddress')}
+                    >
                         <Row gutter={16}>
                             <Col span={8}>
                                 <Form.Item
@@ -282,12 +286,12 @@ const FormOrder = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select province",
+                                            message: t('form_rule.province_required')
                                         },
                                     ]}
                                 >
                                     <Select
-                                        placeholder="Select Province"
+                                        placeholder={t('label.select_province')}
                                         onChange={(value) => {
                                             setAddress((prev) => ({
                                                 ...prev,
@@ -315,12 +319,12 @@ const FormOrder = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select district",
+                                            message: t('form_rule.district_required')
                                         },
                                     ]}
                                 >
                                     <Select
-                                        placeholder="Select District"
+                                        placeholder={t('label.select_district')}
                                         onChange={(value) => {
                                             setAddress((prev) => ({
                                                 ...prev,
@@ -344,12 +348,14 @@ const FormOrder = () => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select ward",
+                                            message: t('form_rule.ward_required')
                                         },
                                     ]}
                                     required
                                 >
-                                    <Select placeholder="Select Ward">
+                                    <Select
+                                        placeholder={t('label.select_ward')}
+                                    >
                                         {recipientWards.map((item) => {
                                             return (
                                                 <Option value={item.key}>
@@ -373,7 +379,7 @@ const FormOrder = () => {
                             type="primary"
                             className="bg-orange-400 text-white rounded-md py-2 px-4 font-bold"
                         >
-                            Submit
+                            {t('label.submit')}
                         </button>
                     </Form.Item>
                 </Form>

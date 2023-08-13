@@ -1,0 +1,89 @@
+{
+  "home": {
+    "name": "TDT Logistics",
+    "description": "Khám phá dịch vụ logistics liền mạch tốt nhất cùng TDT Logistics. Tối ưu hóa chuỗi cung ứng của bạn với dịch vụ quản lý vận chuyển chuyên nghiệp, kho hàng tiên tiến và dịch vụ tư vấn chuỗi cung ứng của chúng tôi. Nền tảng của chúng tôi cung cấp theo dõi thời gian thực, chuyên môn về hải quan và tích hợp công nghệ để đảm bảo hiệu suất tối ưu. Hãy tin tưởng vào tính đáng tin cậy, tầm vóc toàn cầu và cách tiếp cận tập trung vào khách hàng để nâng cao hoạt động kinh doanh của bạn. Trải nghiệm sức mạnh của các giải pháp tùy chỉnh thích nghi với nhu cầu của bạn và đồng thời hưởng lợi từ hiểu biết về ngành của chúng tôi. Hãy chọn TDT Logistics ngay hôm nay và cách mạng hóa trải nghiệm logistics của bạn."
+  },
+  "label": {
+    "all": "Tất cả",
+    "searchPlaceholder": "Tìm kiếm ...",
+    "selectStatus": "Chọn trạng thái",
+    "login": "Đăng nhập",
+    "backHome": "Trở lại Trang chủ",
+    "404_description": "Xin lỗi, trang mà bạn đã truy cập không tồn tại.",
+    "profile": "Hồ sơ cá nhân",
+    "submit": "Gửi",
+    "createOrder": "Tạo đơn hàng",
+    "select_province": "Chọn Tỉnh / Thành phố",
+    "select_district": "Chọn Quận / Huyện",
+    "select_ward": "Chọn Phường / Xã",
+    "send": "Gửi",
+    "client": "Khách hàng",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "name": "Tên",
+    "phone": "Số điện thoại",
+    "address": "Địa chỉ",
+    "postoffice": "Bưu điện",
+    "addRoute": "Thêm tuyến đường",
+    "enterOtp": "Nhập mã OTP của bạn",
+    "verifyOrp": "Xác nhận OTP",
+    "verifyPhone": "Xác nhận số điện thoại của bạn",
+    "sendCodeViaSMS": "Gửi mã qua SMS"
+  },
+  "toast": {
+    "updateProfile_success": "Cập nhật hồ sơ thành công",
+    "createOrder_success": "Tạo Đơn hàng thành công!",
+    "copyOrderNumber_success": "Số đơn hàng đã được sao chép ({{orderNumber}})",
+    "sendOtp_success": "Gửi OTP thành công!"
+  },
+  "form_rule": {
+    "name_required": "Vui lòng nhập tên của bạn!",
+    "province_required": "Vui lòng chọn một tỉnh / thành phố!",
+    "district_required": "Vui lòng chọn một quận / huyện!",
+    "ward_required": "Vui lòng chọn một phường / xã!",
+    "senderName_required": "Vui lòng nhập tên người gửi!",
+    "senderPhone_required": "Vui lòng nhập số điện thoại người gửi!",
+    "phone_valid": "Vui lòng nhập số điện thoại hợp lệ tại Việt Nam!",
+    "recipientName_required": "Vui lòng nhập tên người nhận!",
+    "recipientPhone_required": "Vui lòng nhập số điện thoại người nhận!",
+    "email_required": "Vui lòng nhập email của bạn!",
+    "email_valid": "Vui lòng nhập một địa chỉ email hợp lệ!",
+    "password_valid": "Vui lòng nhập mật khẩu của bạn!",
+    "postoffice_required": "Vui lòng chọn bưu điện!",
+    "searchToSelect": "Tìm kiếm để chọn"
+  },
+  "order": {
+    "label": {
+      "orderNumber": "Số đơn hàng",
+      "status": "Trạng thái",
+      "sender": "Người gửi",
+      "senderAddress": "Địa chỉ người gửi",
+      "recipient": "Người nhận",
+      "recipientAddress": "Địa chỉ người nhận",
+      "senderName": "Tên người gửi",
+      "senderPhone": "Số điện thoại người gửi",
+      "recipientName": "Tên người nhận",
+      "recipientPhone": "Số điện thoại người nhận",
+      "shippingDate": "Ngày gửi hàng",
+      "expectedDeliveryDate": "Ngày dự kiến giao hàng"
+    }
+  },
+  "user": {
+    "label": {
+      "name": "Tên",
+      "phone": "Số điện thoại",
+      "address": "Địa chỉ"
+    }
+  },
+  "chat": {
+    "chat_with": "Trò chuyện với {{roomName}}",
+    "inputMes_placeholder": "Nhập tin nhắn của bạn",
+    "goToChat": "Chuyển đến trò chuyện"
+  },
+  "status": {
+    "pending": "Đang chờ xử lý",
+    "shipped": "Đã gửi hàng",
+    "delivered": "Đã giao hàng",
+    "cancelled": "Đã hủy"
+  }
+}

@@ -4,9 +4,11 @@ import { Form, Input, Select, Row, Col } from "antd";
 import { useAddressHook } from "../../hooks/useAddressHook";
 import axios from "axios";
 import { toast, Toaster } from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const { Option } = Select;
 const Profile = (props) => {
+    const {t} = useTranslation()
     const formRef = useRef(null);
     const { userInfo, setUserInfo, user, setLoading } = useContext(AppContext);
     const [data, setData] = useState(null);
@@ -50,7 +52,7 @@ const Profile = (props) => {
                 addressDescription: values.addressDescription,
             })
             .then((res) => {
-                toast.success("Update profile successfully!");
+                toast.success(t('toast.updateProfile_success'));
                 setLoading(false);
                 setUserInfo((prev) => ({
                     ...prev,
@@ -62,7 +64,6 @@ const Profile = (props) => {
                 }));
             })
             .catch((err) => {
-                console.log("err", err.response);
                 toast.error(err.response);
                 setLoading(false);
             });
@@ -72,7 +73,7 @@ const Profile = (props) => {
         <div className="flex flex-col items-center">
             <div className="w-[600px] max-w-[calc(100vw-40px)]">
                 <div className="font-bold text-2xl mb-2 text-center">
-                    Profile
+                    {t('label.profile')}
                 </div>
                 <Form
                     name="Profile"
@@ -83,20 +84,26 @@ const Profile = (props) => {
                 >
                     <Form.Item
                         name="name"
-                        label="Name"
+                        label={t('user.label.name')}
                         rules={[
                             {
                                 required: true,
-                                message: "Please input your name!",
+                                message: t('form_rule.name_required'),
                             },
                         ]}
                     >
                         <Input />
                     </Form.Item>
-                    <Form.Item name="phone" label="Phone" disabled>
+                    <Form.Item
+                        name="phone"
+                        label={t('user.label.phone')}
+                        disabled
+                    >
                         <Input disabled={true} />
                     </Form.Item>
-                    <Form.Item label="Address">
+                    <Form.Item
+                        label={t('user.label.address')}
+                    >
                         <Row gutter={16}>
                             <Col span={8}>
                                 <Form.Item
@@ -104,8 +111,7 @@ const Profile = (props) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                "Please select a province!",
+                                            message:t('form_rule.province_required')
                                         },
                                     ]}
                                 >
@@ -138,8 +144,7 @@ const Profile = (props) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message:
-                                                "Please select a district!",
+                                            message:t('form_rule.district_required')
                                         },
                                     ]}
                                 >
@@ -171,7 +176,7 @@ const Profile = (props) => {
                                     rules={[
                                         {
                                             required: true,
-                                            message: "Please select a ward!",
+                                            message:t('form_rule.ward_required')
                                         },
                                     ]}
                                 >
@@ -198,7 +203,7 @@ const Profile = (props) => {
                             type="submit"
                             className="bg-orange-400 text-white rounded-md py-2 px-4 font-bold"
                         >
-                            Submit
+                            {t('label.submit')}
                         </button>
                     </Form.Item>
                 </Form>

@@ -6,8 +6,10 @@ import moment from "moment";
 import { FiCopy } from "react-icons/fi";
 import OrderNumber from "../../../components/OrderNumber";
 import {Spin} from "antd";
+import {useTranslation} from "react-i18next";
 
 const InfoOrder = (props) => {
+    const {t} = useTranslation();
     const { orderNumber } = props;
     const [data, setData] = useState(null);
 
@@ -49,32 +51,32 @@ const InfoOrder = (props) => {
             </div>
             <div className="grid grid-cols-2 max-md:grid-cols-1 w-full">
                 <div className="p-2">
-                    <div className="font-bold text-lg ">Sender</div>
+                    <div className="font-bold text-lg ">{t('order.label.sender')}</div>
                     {viewInfo({
-                        label: "Name",
+                        label: t('label.name'),
                         value: data.senderName,
                     })}
                     {viewInfo({
-                        label: "Phone",
+                        label: t('label.phone'),
                         value: data.senderName,
                     })}
                     {viewInfo({
-                        label: "Address",
+                        label: t('label.address'),
                         value: `${senderAddress?.province}, ${senderAddress?.district}, ${senderAddress?.ward} \n${data.senderAddressDescription}`,
                     })}
                 </div>
                 <div className="p-2">
-                    <div className="font-bold text-lg ">recipient</div>
+                    <div className="font-bold text-lg ">{t('order.label.recipient')}</div>
                     {viewInfo({
-                        label: "Name",
+                        label: t('label.name'),
                         value: data.recipientName,
                     })}
                     {viewInfo({
-                        label: "Phone",
+                        label: t('label.phone'),
                         value: data.recipientPhone,
                     })}
                     {viewInfo({
-                        label: "Address",
+                        label: t('label.address'),
                         value: `${recipientAddress.province}, ${recipientAddress.district}, ${recipientAddress.ward} \n${data.recipientAddressDescription}`,
                     })}
                 </div>
@@ -82,13 +84,13 @@ const InfoOrder = (props) => {
             <div className="grid grid-cols-2 max-md:grid-cols-1 w-full">
                 <div className="p-2">
                     {viewInfo({
-                        label: "Shipping date",
+                        label: t('label.shippingDate'),
                         value: moment().format("LLL"),
                     })}
                 </div>
                 <div className="p-2">
                     {viewInfo({
-                        label: "expected Delivery Date",
+                        label: t('label.expectedDeliveryDate'),
                         value: moment().format("LLL"),
                     })}
                 </div>

@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import ShippingOrderStatus from "./ShippingOrderStatus";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import { FiCopy } from "react-icons/fi";

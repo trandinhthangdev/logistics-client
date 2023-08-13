@@ -4,8 +4,10 @@ import {Table, Input, Spin} from "antd";
 import { Link, useNavigate } from "react-router-dom";
 import ClientItem from "./ClientItem";
 import {debounce} from "lodash"
+import {useTranslation} from "react-i18next";
 const pageSize = 10;
 const ClientList = (props) => {
+    const {t} = useTranslation();
     const navigate = useNavigate();
     const [searchTextInput, setSearchTextInput] = useState("")
     const [data, setData] = useState({
@@ -67,14 +69,6 @@ const ClientList = (props) => {
             });
     };
 
-    const handleSearch = () => {
-        setData((prev) => ({
-            ...prev,
-            page: 0,
-        }));
-    };
-
-
     const observer = useRef();
     const lastEndRef = useCallback(
         (node) => {
@@ -114,7 +108,7 @@ const ClientList = (props) => {
     return (
         <div className="w-[360px] max-md:w-[240px]">
             <Input.Search
-                placeholder="Search..."
+                placeholder={t('label.searchPlaceholder')}
                 value={searchTextInput}
                 onChange={(e) => {
                     setSearchTextInput(e.target.value)

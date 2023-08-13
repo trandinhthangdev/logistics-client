@@ -6,6 +6,7 @@ import reportWebVitals from "./reportWebVitals";
 import AppContextProvider from "./contexts/AppContext";
 import { API_BASE_URL } from "./utils/contants";
 import axios from "axios";
+import  "./providers/translations/i18n";
 
 axios.defaults.baseURL = API_BASE_URL;
 axios.defaults.withCredentials = true;

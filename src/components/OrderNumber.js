@@ -1,12 +1,16 @@
 import {FiCopy} from "react-icons/fi";
 import {toast} from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const OrderNumber = (props) => {
     const {orderNumber} = props;
+    const {t} = useTranslation();
     const onCopyOrderNumber = () => {
         navigator.clipboard.writeText(orderNumber)
             .then(() => {
-                toast.success(`Order number copied (${orderNumber})`)
+                toast.success(t('toast.copyOrderNumber_success', {
+                    orderNumber
+                }))
             })
             .catch(err => {
             });

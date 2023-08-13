@@ -20,10 +20,12 @@ import { AppContext } from "../../../contexts/AppContext";
 import EmojiBtn from "./../../../components/EmojiBtn";
 import { app } from "../../../firebase.config";
 import axios from "axios";
+import {useTranslation} from "react-i18next";
 
 const db = getFirestore(app);
 
 const ChatBox = (props) => {
+    const {t} = useTranslation();
     const { onClose, roomId } = props;
     const boxRef = useRef(null);
     const {  loadingUser } = useContext(AppContext);
@@ -82,7 +84,9 @@ const ChatBox = (props) => {
     return (
         <div className="h-full flex flex-col">
             <div className="flex items-center p-2">
-                <div className="font-bold flex-1 text-xl">Chat with {user?.name ?? ""}</div>
+                <div className="font-bold flex-1 text-xl">{t('chat.chat_with', {
+                    roomName: user?.name ?? ""
+                })}</div>
             </div>
             <div className="p-2 flex-1 h-[calc(100%-100px)] flex flex-col justify-end">
                 <div
@@ -127,7 +131,7 @@ const ChatBox = (props) => {
             </div>
             <div>
                 <Input
-                    placeholder="Enter your message"
+                    placeholder={t('chat.inputMes_placeholder')}
                     prefix={
                         <EmojiBtn
                             onAddEmoji={(value) => {
@@ -141,7 +145,7 @@ const ChatBox = (props) => {
                     }}
                     onKeyPress={handleKeyPress}
                     suffix={
-                        <Tooltip title="Send">
+                        <Tooltip title={t('label.send')}>
                             <div
                                 className="cursor-pointer text-blue-600"
                                 onClick={() => onSendMessage()}

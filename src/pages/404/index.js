@@ -2,22 +2,24 @@ import React, {useContext} from "react";
 import {Button, Result} from "antd";
 import {AppContext} from "../../contexts/AppContext";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 const Page404 = (props) => {
     const { isAdmin } = useContext(AppContext);
     const navigate = useNavigate();
+    const {t} = useTranslation();
     return (
         <div className="">
             <Result
                 status="404"
                 title="404"
-                subTitle="Sorry, the page you visited does not exist."
+                subTitle={t('label.404_description')}
                 extra={<button  onClick={() => {
                     if (isAdmin) {
                         navigate("/admin")
                     } else {
                         navigate("/")
                     }
-                }}>Back Home</button>}
+                }}>{t('label.backHome')}</button>}
             />
         </div>
     )

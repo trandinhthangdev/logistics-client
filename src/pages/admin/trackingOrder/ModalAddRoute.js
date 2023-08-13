@@ -4,6 +4,7 @@ import React, {useContext} from "react";
 import {AppContext} from "../../../contexts/AppContext";
 import {addDoc, collection, getFirestore, serverTimestamp} from "firebase/firestore";
 import {app} from "../../../firebase.config";
+import {useTranslation} from "react-i18next";
 const db = getFirestore(app);
 
 const ModalAddRoute = (props) => {
@@ -12,6 +13,7 @@ const ModalAddRoute = (props) => {
         onClose,
         orderNumber
     } = props;
+    const {t} = useTranslation();
     const { userInfo, setUserInfo, user, setLoading } = useContext(AppContext);
     const onFinish = async (values) => {
         setLoading(true)
@@ -37,18 +39,18 @@ const ModalAddRoute = (props) => {
             >
                 <Form.Item
                     name="postoffice"
-                    label="Post office"
+                    label={t('label.postoffice')}
                     rules={[
                         {
                             required: true,
-                            message: "Please select postoffice!",
+                            message: t('form_rule.postoffice_required')
                         },
                     ]}
                 >
                     <Select
                         showSearch
                         style={{ width: '100%' }}
-                        placeholder="Search to Select"
+                        placeholder={t('form_rule.searchToSelect')}
                         optionFilterProp="children"
                         filterOption={(input, option) => (option?.label ?? '').includes(input)}
                         filterSort={(optionA, optionB) =>
@@ -69,7 +71,7 @@ const ModalAddRoute = (props) => {
                         type="submit"
                         className="bg-orange-400 text-white rounded-md py-2 px-4 font-bold"
                     >
-                        Submit
+                        {t('label.submit')}
                     </button>
                 </Form.Item>
             </Form>

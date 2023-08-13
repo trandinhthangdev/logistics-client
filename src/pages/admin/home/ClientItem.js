@@ -16,10 +16,12 @@ import {
 import { app } from "../../../firebase.config";
 import {useLocation} from "react-router-dom";
 import {Tooltip} from "antd";
+import {useTranslation} from "react-i18next";
 
 const db = getFirestore(app);
 
 const ClientItem = (props) => {
+    const {t} = useTranslation();
     const { search } = useLocation();
     const queryParams = new URLSearchParams(search);
     const roomId = queryParams.get("roomId");
@@ -41,7 +43,7 @@ const ClientItem = (props) => {
         return unsubscribe;
     }, [uid]);
     return (
-        <Tooltip title="Go to chat">
+        <Tooltip title={t('chat.goToChat')}>
             <div className={`cursor-pointer p-2 ${roomId === uid ? 'bg-gray-200' : ''}`}>
                 <div className="font-bold">{name}</div>
                 {newMessage &&

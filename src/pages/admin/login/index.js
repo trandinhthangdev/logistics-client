@@ -4,8 +4,10 @@ import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { auth } from "./../../../firebase.config";
 import {AppContext} from "../../../contexts/AppContext";
 import {useNavigate} from "react-router-dom";
+import {useTranslation} from "react-i18next";
 
 const AdminLogin = (props) => {
+    const {t} = useTranslation()
     const navigate = useNavigate();
     const { setLoading, setUser } = useContext(AppContext);
     const onFinish = (values) => {
@@ -26,7 +28,7 @@ const AdminLogin = (props) => {
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="text-3xl font-bold mb-4">
-                Login
+                {t('label.login')}
             </div>
             <Form
                  className="w-[320px]"
@@ -35,16 +37,16 @@ const AdminLogin = (props) => {
                 layout="vertical"
             >
                 <Form.Item
-                    label="Email"
+                    label={t('label.email')}
                     name="email"
                     rules={[
                         {
                             required: true,
-                            message: 'Please enter your email!',
+                            message: t('form_rule.email_required'),
                         },
                         {
                             type: 'email',
-                            message: 'Please enter a valid email!',
+                            message: t('form_rule.email_valid'),
                         },
                     ]}
                 >
@@ -52,12 +54,12 @@ const AdminLogin = (props) => {
                 </Form.Item>
 
                 <Form.Item
-                    label="Password"
+                    label={t('label.password')}
                     name="password"
                     rules={[
                         {
                             required: true,
-                            message: 'Please enter your password!',
+                            message: t('form_rule.password_valid'),
                         },
                     ]}
                 >
@@ -69,7 +71,7 @@ const AdminLogin = (props) => {
                         type="primary"
                         className="bg-orange-400 text-white rounded-md py-2 px-4 font-bold w-full"
                     >
-                        Log In
+                        {t('label.login')}
                     </button>
                 </Form.Item>
             </Form>

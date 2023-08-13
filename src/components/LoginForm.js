@@ -7,11 +7,13 @@ import {auth} from "../firebase.config";
 import {toast} from "react-hot-toast";
 import {AppContext} from "../contexts/AppContext";
 import 'react-phone-input-2/lib/style.css'
+import {useTranslation} from "react-i18next";
 
 const LoginForm = (props) => {
     const {
         onSuccess
     } = props;
+    const {t} = useTranslation();
     const [otp, setOtp] = useState("");
     const [phone, setPhone] = useState("");
     const { user, setIsAuthModal, setLoading } = useContext(AppContext);
@@ -42,7 +44,7 @@ const LoginForm = (props) => {
                 window.confirmationResult = confirmationResult;
                 setLoading(false);
                 setShowOTP(true);
-                toast.success("OTP sent successfully!");
+                toast.success(t('toast.sendOtp_success'));
             })
             .catch((error) => {
                 setLoading(false);
@@ -76,7 +78,7 @@ const LoginForm = (props) => {
                         htmlFor="otp"
                         className="font-bold text-xl text-white text-center"
                     >
-                        Enter your OTP
+                        {t('label.enterOtp')}
                     </label>
                     <OtpInput
                         value={otp}
@@ -91,7 +93,9 @@ const LoginForm = (props) => {
                         onClick={onOTPVerify}
                         className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-white rounded"
                     >
-                        <span>Verify OTP</span>
+                        <span>
+                            {t('label.verifyOrp')}
+                        </span>
                     </button>
                 </>
             ) : (
@@ -103,21 +107,21 @@ const LoginForm = (props) => {
                         htmlFor=""
                         className="font-bold text-xl text-center"
                     >
-                        Verify your phone number
+                        {t('label.verifyPhone')}
                     </label>
                     <PhoneInput
                         country={"vn"}
                         value={phone}
                         dialCode={84}
                         onChange={setPhone}
-                        placeholder={"+84337724134"}
+                        placeholder={"+84..."}
                         className={`w-full flex items-center my-2 [&_input]:text-gray-700 [&_input]:flex-1`}
                     />
                     <button
                         onClick={onSignup}
                         className="bg-emerald-600 w-full flex gap-1 items-center justify-center py-2.5 text-white rounded"
                     >
-                        <span>Send code via SMS</span>
+                        <span>{t('label.sendCodeViaSMS')}</span>
                     </button>
                 </>
             )}

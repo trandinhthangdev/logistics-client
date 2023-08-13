@@ -10,10 +10,12 @@ import LoadingProgress from "../../../components/LoadingProgress";
 import OrderNumber from "../../../components/OrderNumber";
 import {AiOutlineArrowRight} from "react-icons/ai"
 import {debounce} from "lodash";
+import {useTranslation} from "react-i18next";
 const { Option } = Select;
 
 const pageSize = 10;
 const OrderList = (props) => {
+    const {t} = useTranslation()
     const [searchTextInput, setSearchTextInput] = useState("")
     const [data, setData] = useState({
         items: [],
@@ -99,7 +101,7 @@ const OrderList = (props) => {
 
     const columns = [
         {
-            title: "Order Number",
+            title: t('order.label.orderNumber'),
             dataIndex: "orderNumber",
             key: "orderNumber",
             render: (value) => {
@@ -109,7 +111,7 @@ const OrderList = (props) => {
             }
         },
         {
-            title: "Status",
+            title: t('order.label.status'),
             dataIndex: "status",
             key: "status",
             render: (value, record) => {
@@ -122,7 +124,7 @@ const OrderList = (props) => {
             },
         },
         {
-            title: "Sender",
+            title: t('order.label.sender'),
             dataIndex: "senderInfo",
             key: "senderInfo",
             render: (value, record) => {
@@ -135,7 +137,7 @@ const OrderList = (props) => {
             },
         },
         {
-            title: "Sender Address",
+            title: t('order.label.senderAddress'),
             dataIndex: "senderAddress",
             key: "senderAddress",
             render: (value, record) => {
@@ -153,7 +155,7 @@ const OrderList = (props) => {
             },
         },
         {
-            title: "Recipient",
+            title: t('order.label.recipient'),
             dataIndex: "recipientInfo",
             key: "recipientInfo",
             render: (value, record) => {
@@ -166,7 +168,7 @@ const OrderList = (props) => {
             },
         },
         {
-            title: "Recipient Address",
+            title: t('order.label.recipientAddress'),
             dataIndex: "recipientAddress",
             key: "recipientAddress",
             render: (value, record) => {
@@ -212,7 +214,7 @@ const OrderList = (props) => {
     const statusOptions = [
         {
             value: "",
-            label: "All",
+            label: t('label.all'),
         },
         ...STATUSES
     ];
@@ -228,7 +230,7 @@ const OrderList = (props) => {
                     />
                 <Select
                      className="w-[120px]"
-                    placeholder="Select status"
+                    placeholder={t('label.selectStatus')}
                     onChange={(value) => {
                         const prevFilters = { ...filters };
                         if (value) {

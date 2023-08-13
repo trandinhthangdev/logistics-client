@@ -3,7 +3,9 @@ import axios from "axios";
 import {BsFillPersonFill} from "react-icons/bs"
 import {FaTruck} from "react-icons/fa"
 import {colorByStatus, labelByStatus, OrderStatusEnum} from "../../../utils/contants";
+import {useTranslation} from "react-i18next";
 const StatisBox = (props) => {
+    const {t} = useTranslation()
     const [data, setData] = useState(null)
 
     useEffect(() => {
@@ -23,7 +25,7 @@ const StatisBox = (props) => {
         <div className="m-1 flex items-center justify-center rounded-2xl p-4 bg-gray-400 text-white shadow-xl">
             <div className="font-bold text-2xl mr-2">{data.client}</div>
             <div className="text-md mx-1">
-                Client
+                {t('label.client')}
             </div>
             <BsFillPersonFill className="text-4xl" />
         </div>
