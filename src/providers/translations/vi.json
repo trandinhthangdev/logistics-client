@@ -30,7 +30,8 @@
         "verifyPhone": "Xác nhận số điện thoại của bạn",
         "sendCodeViaSMS": "Gửi mã qua SMS",
         "shippingDate": "Ngày gửi hàng",
-        "expectedDeliveryDate": "Ngày dự kiến giao hàng"
+        "expectedDeliveryDate": "Ngày dự kiến giao hàng",
+        "deliveryDate": "Ngày giao hàng"
     },
     "toast": {
         "updateProfile_success": "Cập nhật hồ sơ thành công",

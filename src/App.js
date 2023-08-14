@@ -23,10 +23,64 @@ import AdminTrackingOrder from "./pages/admin/trackingOrder";
 import Page404 from "./pages/404";
 import ModalLogin from "./components/ModalLogin";
 import Login from "./pages/login";
+import { mainRoutes } from "./routes";
 
 function App() {
-    const { user, userInfo, loading, isAdmin, isAuthModal, setIsAuthModal } = useContext(AppContext);
+    const { user, userInfo, loading, isAdmin, isAuthModal, setIsAuthModal } =
+        useContext(AppContext);
     const router = createBrowserRouter([
+        ...mainRoutes
+            .map((route, index) => {
+                const {
+                    component: ComponentRoute,
+                    path,
+                    isExact,
+                    isClient,
+                } = route;
+                if (!isAdmin && route.isAdmin) {
+                    return undefined;
+                }
+                if (route.isAdmin) {
+                    if (isAdmin) {
+                        return {
+                            path: path,
+                            element: (
+                                <AppAdminLayout>
+                                    <ComponentRoute />
+                                </AppAdminLayout>
+                            ),
+                        };
+                    } else {
+                        return undefined;
+                    }
+                } else {
+                    if (route.isClient ? !!user : true) {
+                        return {
+                            path: path,
+                            element: (
+                                <AppLayout>
+                                    <ComponentRoute />
+                                </AppLayout>
+                            ),
+                        };
+                    }
+                }
+            })
+            .filter((item) => !!item),
+        {
+            path: "*",
+            element: isAdmin ? (
+                <AppAdminLayout>
+                    <Page404 />
+                </AppAdminLayout>
+            ) : (
+                <AppLayout>
+                    <Page404 />
+                </AppLayout>
+            ),
+        },
+    ]);
+    const router2 = createBrowserRouter([
         {
             path: "/new-order",
             element: (
@@ -81,14 +135,14 @@ function App() {
                                     </AppLayout>
                                 ),
                             },
-                          {
-                              path: "/",
-                              element: (
-                                  <AppLayout>
-                                      <Home />
-                                  </AppLayout>
-                              ),
-                          }
+                            {
+                                path: "/",
+                                element: (
+                                    <AppLayout>
+                                        <Home />
+                                    </AppLayout>
+                                ),
+                            },
                         ]),
               ]
             : [
@@ -108,23 +162,27 @@ function App() {
                           </AppLayout>
                       ),
                   },
-                {
-                    path: "/",
-                    element: (
-                        <AppLayout>
-                            <Home />
-                        </AppLayout>
-                    ),
-                }
+                  {
+                      path: "/",
+                      element: (
+                          <AppLayout>
+                              <Home />
+                          </AppLayout>
+                      ),
+                  },
               ]),
         {
             path: "*",
-            element: isAdmin ? <AppAdminLayout>
-                <Page404 />
-            </AppAdminLayout> : <AppLayout>
-                <Page404 />
-            </AppLayout>
-        }
+            element: isAdmin ? (
+                <AppAdminLayout>
+                    <Page404 />
+                </AppAdminLayout>
+            ) : (
+                <AppLayout>
+                    <Page404 />
+                </AppLayout>
+            ),
+        },
     ]);
     if (user === undefined || userInfo === undefined) {
         return <></>;
@@ -134,9 +192,14 @@ function App() {
             <Toaster toastOptions={{ duration: 4000 }} />
             {loading && <LoadingBg />}
             <RouterProvider router={router} />
-            {isAuthModal && <ModalLogin open={true} onClose={() => {
-                setIsAuthModal(false)
-            }}/>}
+            {isAuthModal && (
+                <ModalLogin
+                    open={true}
+                    onClose={() => {
+                        setIsAuthModal(false);
+                    }}
+                />
+            )}
         </>
     );
 }

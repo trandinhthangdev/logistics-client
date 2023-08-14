@@ -15,6 +15,7 @@ const FormOrder = () => {
     const { userInfo, user, setLoading, setIsAuthModal } =
         useContext(AppContext);
     const formRef = useRef(null);
+    const [isRedirect, setIsRedirect] = useState(false);
     const [data, setData] = useState(null);
     const [address, setAddress] = useState({
         senderAddressProvince: "",
@@ -95,19 +96,25 @@ const FormOrder = () => {
         axios
             .post("/api/orders", values)
             .then((res) => {
-                console.log("res", res);
                 toast.success("Create Order successfully!");
                 setLoading(false);
+                setIsRedirect(true);
                 // if (res.data?.orderNumber)
                 //     navigate(`/detail-order/${res.data.orderNumber}`);
                 // else
-                navigate("/");
+                // navigate("/", { push: true });
             })
             .catch((err) => {
                 toast.error(err.response);
                 setLoading(false);
             });
     };
+
+    useEffect(() => {
+        if (isRedirect) {
+            navigate("/");
+        }
+    }, [isRedirect]);
 
     if (!data) return <></>;
 

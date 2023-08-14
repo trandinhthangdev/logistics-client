@@ -5,7 +5,7 @@ import { getAuth, signOut } from "firebase/auth";
 import axios from "axios";
 export const AppContext = createContext({});
 
-const AppContextProvider = ({ children }) => {
+const  AppContextProvider = ({ children }) => {
     const [user, setUser] = useState(undefined);
     const [userInfo, setUserInfo] = useState(undefined);
     const [loading, setLoading] = useState(false);
