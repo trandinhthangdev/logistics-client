@@ -5,21 +5,24 @@ import { renderStatusLabel, showAddressByKey } from "../../../utils/functions";
 import moment from "moment";
 import { FiCopy } from "react-icons/fi";
 import OrderNumber from "../../../components/OrderNumber";
-import {Spin} from "antd";
-import {useTranslation} from "react-i18next";
+import { Spin } from "antd";
+import { useTranslation } from "react-i18next";
 
 const InfoOrder = (props) => {
-    const {t} = useTranslation();
-    const { orderNumber, onGetOrderStatus } = props;
+    const { t } = useTranslation();
+    const { orderNumber, onGetOrder } = props;
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        axios.get(`/api/orders/${orderNumber}`).then((res) => {
-            setData(res.data);
-            onGetOrderStatus(res.data.status)
-        }).catch(err => {
-            console.log('err',err)
-        })
+        axios
+            .get(`/api/orders/${orderNumber}`)
+            .then((res) => {
+                setData(res.data);
+                onGetOrder(res.data);
+            })
+            .catch((err) => {
+                console.log("err", err);
+            });
     }, []);
     const viewInfo = ({ label, value }) => {
         return (
@@ -30,9 +33,11 @@ const InfoOrder = (props) => {
         );
     };
     if (!data) {
-        return <div className="p-4 rounded-md flex flex-col items-center">
-            <Spin />
-        </div>;
+        return (
+            <div className="p-4 rounded-md flex flex-col items-center">
+                <Spin />
+            </div>
+        );
     }
     const senderAddress = showAddressByKey({
         province: data.senderAddressProvince,
@@ -52,32 +57,36 @@ const InfoOrder = (props) => {
             </div>
             <div className="grid grid-cols-2 max-md:grid-cols-1 w-full">
                 <div className="p-2">
-                    <div className="font-bold text-lg ">{t('order.label.sender')}</div>
+                    <div className="font-bold text-lg ">
+                        {t("order.label.sender")}
+                    </div>
                     {viewInfo({
-                        label: t('label.name'),
+                        label: t("label.name"),
                         value: data.senderName,
                     })}
                     {viewInfo({
-                        label: t('label.phone'),
+                        label: t("label.phone"),
                         value: data.senderName,
                     })}
                     {viewInfo({
-                        label: t('label.address'),
+                        label: t("label.address"),
                         value: `${senderAddress?.province}, ${senderAddress?.district}, ${senderAddress?.ward} \n${data.senderAddressDescription}`,
                     })}
                 </div>
                 <div className="p-2">
-                    <div className="font-bold text-lg ">{t('order.label.recipient')}</div>
+                    <div className="font-bold text-lg ">
+                        {t("order.label.recipient")}
+                    </div>
                     {viewInfo({
-                        label: t('label.name'),
+                        label: t("label.name"),
                         value: data.recipientName,
                     })}
                     {viewInfo({
-                        label: t('label.phone'),
+                        label: t("label.phone"),
                         value: data.recipientPhone,
                     })}
                     {viewInfo({
-                        label: t('label.address'),
+                        label: t("label.address"),
                         value: `${recipientAddress.province}, ${recipientAddress.district}, ${recipientAddress.ward} \n${data.recipientAddressDescription}`,
                     })}
                 </div>
@@ -85,14 +94,18 @@ const InfoOrder = (props) => {
             <div className="grid grid-cols-2 max-md:grid-cols-1 w-full">
                 <div className="p-2">
                     {viewInfo({
-                        label: t('label.shippingDate'),
-                        value: data.shippingDate ? moment(data.shippingDate).format("LLL") : '',
+                        label: t("label.shippingDate"),
+                        value: data.shippingDate
+                            ? moment(data.shippingDate).format("LLL")
+                            : "",
                     })}
                 </div>
                 <div className="p-2">
                     {viewInfo({
-                        label: t('label.expectedDeliveryDate'),
-                        value: data.createdAt ? moment(data.createdAt).add(5, 'days').format("LL") : '',
+                        label: t("label.expectedDeliveryDate"),
+                        value: data.createdAt
+                            ? moment(data.createdAt).add(5, "days").format("LL")
+                            : "",
                     })}
                 </div>
             </div>

@@ -67,7 +67,8 @@
       "recipientName": "Recipient Name",
       "recipientPhone": "Recipient Phone",
       "shippingDate": "Shipping date",
-      "expectedDeliveryDate": "expected Delivery Date"
+      "expectedDeliveryDate": "expected Delivery Date",
+      "deliveryDate": "Delivery date"
     }
 
   },
