@@ -10,12 +10,13 @@ import {useTranslation} from "react-i18next";
 
 const InfoOrder = (props) => {
     const {t} = useTranslation();
-    const { orderNumber } = props;
+    const { orderNumber, onGetOrderStatus } = props;
     const [data, setData] = useState(null);
 
     useEffect(() => {
         axios.get(`/api/orders/${orderNumber}`).then((res) => {
             setData(res.data);
+            onGetOrderStatus(res.data.status)
         }).catch(err => {
             console.log('err',err)
         })
@@ -85,13 +86,13 @@ const InfoOrder = (props) => {
                 <div className="p-2">
                     {viewInfo({
                         label: t('label.shippingDate'),
-                        value: moment().format("LLL"),
+                        value: data.shippingDate ? moment(data.shippingDate).format("LLL") : '',
                     })}
                 </div>
                 <div className="p-2">
                     {viewInfo({
                         label: t('label.expectedDeliveryDate'),
-                        value: moment().format("LLL"),
+                        value: data.createdAt ? moment(data.createdAt).add(5, 'days').format("LL") : '',
                     })}
                 </div>
             </div>

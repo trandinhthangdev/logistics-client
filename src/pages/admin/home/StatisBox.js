@@ -11,7 +11,6 @@ const StatisBox = (props) => {
     useEffect(() => {
         axios.get('/api/app/statis')
             .then(res => {
-                console.log(res.data)
                 setData(res.data)
             })
             .catch(err => {

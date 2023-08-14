@@ -28,7 +28,9 @@
     "enterOtp": "Enter your OTP",
     "verifyOrp": "Verify OTP",
     "verifyPhone": "Verify your phone number",
-    "sendCodeViaSMS": "Send code via SMS"
+    "sendCodeViaSMS": "Send code via SMS",
+    "shippingDate": "Shipping date",
+    "expectedDeliveryDate": "Expected delivery date"
   },
   "toast": {
     "updateProfile_success": "Update profile successfully",

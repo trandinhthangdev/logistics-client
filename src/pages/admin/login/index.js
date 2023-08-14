@@ -16,9 +16,8 @@ const AdminLogin = (props) => {
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
                 const user = userCredential.user;
-                setUser(user)
                 setLoading(false)
-                navigate("/admin")
+                window.location.href = '/admin'
             })
             .catch((error) => {
                 setLoading(false)

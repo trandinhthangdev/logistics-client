@@ -50,7 +50,6 @@ const AppContextProvider = ({ children }) => {
             setUserInfo(null)
         }).catch((error) => {
         });
-
     }
     const isAdmin = !!user?.email;
     const appContextData = {

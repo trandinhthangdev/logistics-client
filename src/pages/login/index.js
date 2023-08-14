@@ -12,7 +12,8 @@ const Login = (props) => {
                 {t('label.login')}
             </div>
             <LoginForm onSuccess={() => {
-                navigate("/")
+
+                window.location.href = '/'
             }} />
         </div>
     )

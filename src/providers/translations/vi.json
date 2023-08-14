@@ -28,7 +28,9 @@
     "enterOtp": "Nhập mã OTP của bạn",
     "verifyOrp": "Xác nhận OTP",
     "verifyPhone": "Xác nhận số điện thoại của bạn",
-    "sendCodeViaSMS": "Gửi mã qua SMS"
+    "sendCodeViaSMS": "Gửi mã qua SMS",
+    "shippingDate": "Ngày gửi hàng",
+    "expectedDeliveryDate": "Ngày dự kiến giao hàng"
   },
   "toast": {
     "updateProfile_success": "Cập nhật hồ sơ thành công",

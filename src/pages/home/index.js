@@ -83,7 +83,6 @@ const Home = (props) => {
                     loading: false
                 }))
             }).catch(err => {
-            console.log('err',err)
         })
     }
 
@@ -224,7 +223,6 @@ const Home = (props) => {
         ...STATUSES
     ];
 
-    console.log('t',t('home.description'))
     return <div className="flex flex-col items-center">
         <div className="font-bold text-2xl">
             {t('home.name')}

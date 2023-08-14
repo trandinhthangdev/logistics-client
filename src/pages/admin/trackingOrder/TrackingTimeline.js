@@ -3,7 +3,7 @@ import {collection, getFirestore, onSnapshot, orderBy, query, where} from "fireb
 import {FaPlus, FaRoute} from "react-icons/fa"
 import {app} from "../../../firebase.config";
 import {Modal, Popover, Select} from "antd";
-import {POST_OFFICE, POST_OFFICE_LIST} from "../../../utils/contants";
+import {OrderStatusEnum, POST_OFFICE, POST_OFFICE_LIST} from "../../../utils/contants";
 import ModalAddRoute from "./ModalAddRoute";
 import moment from "moment";
 import {MdLocationOn} from "react-icons/md"
@@ -13,7 +13,8 @@ import {useTranslation} from "react-i18next";
 const db = getFirestore(app);
 const TrackingTimeline = (props) => {
     const {
-        orderNumber
+        orderNumber,
+        status
     } = props;
     const {t} = useTranslation();
     const { isAdmin } = useContext(AppContext);
@@ -29,7 +30,7 @@ const TrackingTimeline = (props) => {
 
     return (
         <div className="flex flex-col items-center p-2">
-            {isAdmin && <div  onClick={() => {
+            {(isAdmin && status === OrderStatusEnum.SHIPPED) && <div  onClick={() => {
                 setIsOpenAdd(true)
             }} className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
                 <FaPlus />

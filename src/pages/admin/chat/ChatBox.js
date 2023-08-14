@@ -75,7 +75,6 @@ const ChatBox = (props) => {
             orderBy("timestamp")
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
-            console.log('A', snapshot.docs.length)
             setMessages(snapshot.docs.map((doc) => doc.data()));
         });
         return unsubscribe;
