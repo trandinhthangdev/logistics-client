@@ -37,10 +37,8 @@ function App() {
                     isExact,
                     isClient,
                 } = route;
-                if (!isAdmin && route.isAdmin) {
-                    return undefined;
-                }
                 if (route.isAdmin) {
+
                     if (isAdmin) {
                         return {
                             path: path,
@@ -51,9 +49,24 @@ function App() {
                             ),
                         };
                     } else {
+                        if (route.isAuth) {
+                            return {
+                                path: path,
+                                element: (
+                                    <AppAdminLayout>
+                                        <ComponentRoute />
+                                    </AppAdminLayout>
+                                ),
+                            };
+                        }
                         return undefined;
                     }
                 } else {
+                    if (isAdmin) {
+                        return (
+                            undefined
+                        )
+                    }
                     if (route.isClient ? !!user : true) {
                         return {
                             path: path,

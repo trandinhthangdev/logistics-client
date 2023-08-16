@@ -23,7 +23,7 @@ const ReviewAndCommentForm = ({ data, onSuccess }) => {
                 setLoading(false)
             })
             .catch(err => {
-                toast.error(err.response.data?.message ?? "Error");
+                toast.error(err.response?.data?.message ?? t('toast.error'));
                 setLoading(false)
             })
     };
@@ -46,9 +46,9 @@ const ReviewAndCommentForm = ({ data, onSuccess }) => {
                     count={5}
                     size={24}
                     half={false}
-                    color1="#CCCCCC"
-                    color2="#FFD700"
-                    value={0} // Set initial value here
+                    color1={"#ccc"}
+                    color2={"#42A5F5"}
+                    value={0} 
                 />
             </Form.Item>
 

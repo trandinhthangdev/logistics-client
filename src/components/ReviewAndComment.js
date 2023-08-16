@@ -5,7 +5,7 @@ import {useContext, useState} from "react";
 import {colorByStatus} from "../utils/contants";
 import {AppContext} from "../contexts/AppContext";
 
-const ReviewAndComment = ({ data, onSuccess }) => {
+const ReviewAndComment = ({ data, onSuccess, inTable }) => {
     const { user, isAdmin } = useContext(AppContext);
     const { review, comment } = data;
     const [open, setOpen] = useState(false);
@@ -26,8 +26,7 @@ const ReviewAndComment = ({ data, onSuccess }) => {
                         color1={"#ccc"}
                         color2={"#42A5F5"}
                     />
-                    <div>{comment}</div>
-
+                    <div className={`${inTable ? 'truncate max-h-[30px] ' : ''}`}>{comment}</div>
                 </> : <span className="italic text-gray-400 text-xs">This order has not been rated yet</span>}
             </div>
         )
@@ -60,7 +59,7 @@ const ReviewAndComment = ({ data, onSuccess }) => {
                             color1={"#ccc"}
                             color2={"#42A5F5"}
                         />
-                        <div>{comment}</div>
+                        <div className={`${inTable ? 'truncate max-h-[30px] ' : ''}`}>{comment}</div>
 
                     </> : <span className="italic text-gray-400 text-xs">This order has not been rated yet</span>}
                 </div>

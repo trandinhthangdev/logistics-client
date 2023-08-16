@@ -12,7 +12,7 @@ import {
     serverTimestamp,
 } from "firebase/firestore";
 import { IoMdClose } from "react-icons/io";
-import { Input, Tooltip } from "antd";
+import {Input, Spin, Tooltip} from "antd";
 import { MdEmojiEmotions, MdSend } from "react-icons/md";
 import moment from "moment";
 import { useContext, useEffect, useRef, useState } from "react";
@@ -32,6 +32,7 @@ const ChatBox = (props) => {
     const [user, setUser] = useState(null)
     const [messages, setMessages] = useState([]);
     const [messageInput, setMessageInput] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
         axios.get(`/api/users/get-user/${roomId}`)
@@ -76,9 +77,15 @@ const ChatBox = (props) => {
         );
         const unsubscribe = onSnapshot(q, (snapshot) => {
             setMessages(snapshot.docs.map((doc) => doc.data()));
+            if (!isLoading) {
+                setTimeout(() => {
+                    setIsLoading(true)
+                }, 500)
+            }
         });
         return unsubscribe;
     }, []);
+
 
     return (
         <div className="h-full flex flex-col">
@@ -87,7 +94,7 @@ const ChatBox = (props) => {
                     roomName: user?.name ?? ""
                 })}</div>
             </div>
-            <div className="p-2 flex-1 h-[calc(100%-100px)] flex flex-col justify-end">
+            <div className="p-2 flex-1 h-[calc(100%-100px)] flex flex-col justify-end relative">
                 <div
                     className="max-h-full border border-gray-100 p-2 overflow-y-auto "
                     ref={boxRef}
@@ -127,6 +134,11 @@ const ChatBox = (props) => {
                         );
                     })}
                 </div>
+                {
+                    !isLoading && <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-white">
+                        <Spin />
+                    </div>
+                }
             </div>
             <div>
                 <Input

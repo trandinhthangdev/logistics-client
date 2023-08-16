@@ -18,6 +18,7 @@ export const mainRoutes = [
         component: Login,
         path: links.PATH_LOGIN,
         isExact: true,
+        isAuth: true
     },
     {
         component: NewOrder,
@@ -45,6 +46,8 @@ export const mainRoutes = [
         component: AdminLogin,
         path: links.PATH_ADMIN_LOGIN,
         isExact: true,
+        isAdmin: true,
+        isAuth: true
     },
     {
         component: AdminChat,

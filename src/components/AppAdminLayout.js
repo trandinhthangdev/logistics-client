@@ -1,25 +1,29 @@
 import React, {useContext, useEffect} from "react";
 import {AppContext} from "../contexts/AppContext";
-import {Link} from "react-router-dom";
+import {Link, useLocation, useRoutes} from "react-router-dom";
 import LogoIcon from "../assets/logo.png";
 import {FaPlus, FaShippingFast, FaUserCircle} from "react-icons/fa";
 import {Dropdown} from "antd";
 import {BiLogIn} from "react-icons/bi";
-import LiveChat from "../pages/liveChat";
-import {IoMdClose} from "react-icons/io";
-import {BsFillChatTextFill} from "react-icons/bs";
+
 import { useNavigate } from "react-router-dom";
 import ChangeLanguage from "./ChangeLanguage";
 
 const AppAdminLayout = ({children}) => {
-    const { user, onLogout } = useContext(AppContext);
+    const { user, onLogout ,isAdmin } = useContext(AppContext);
     const navigate = useNavigate();
-
+    const location = useLocation()
     useEffect(() => {
         if (user && !user?.email) {
             navigate("/")
         }
     }, [user]);
+
+    useEffect(() => {
+        if (isAdmin && location.pathname === '/admin/login') {
+            navigate("/admin")
+        }
+    }, [isAdmin]);
     const menuItems = [
         {
             key: '1',
@@ -33,7 +37,6 @@ const AppAdminLayout = ({children}) => {
             ),
         },
     ]
-    // const []
     return (
         <div className="flex flex-col">
             <div className="h-[80px] flex items-center justify-between px-2 shadow-md fixed top-0 left-0 right-0 z-10 bg-white">

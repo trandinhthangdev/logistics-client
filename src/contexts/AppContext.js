@@ -1,8 +1,8 @@
-import React from "react";
 import { createContext, useEffect, useState } from "react";
 import { auth } from "./../firebase.config";
 import { getAuth, signOut } from "firebase/auth";
 import axios from "axios";
+import {LOCAL_USER_INFO} from "../utils/contants";
 export const AppContext = createContext({});
 
 const  AppContextProvider = ({ children }) => {
@@ -17,6 +17,10 @@ const  AppContextProvider = ({ children }) => {
         if (user) {
             setIsAuthModal(false);
             if (!user?.email) {
+                const data = localStorage.getItem(LOCAL_USER_INFO);
+                if (JSON.parse(data)) {
+                    setUserInfo(JSON.parse(data))
+                }
                 axios
                     .get("/api/users/get-me")
                     .then((res) => {
@@ -25,16 +29,25 @@ const  AppContextProvider = ({ children }) => {
                     .catch((err) => {
                         setUserInfo(null);
                     });
+
             } else {
                 setUserInfo(null);
             }
         }
     }, [user]);
     useEffect(() => {
+        if (userInfo) {
+            localStorage.setItem(LOCAL_USER_INFO, JSON.stringify(userInfo));
+        } else if (userInfo === null) {
+            localStorage.removeItem(LOCAL_USER_INFO)
+        }
+    }, [userInfo]);
+    useEffect(() => {
         const unsubscribe = auth.onAuthStateChanged((user) => {
             if (user) {
                 axios.defaults.headers.accessToken = user.accessToken;
                 setUser(user);
+
             } else {
                 setUser(null);
                 setUserInfo(null)

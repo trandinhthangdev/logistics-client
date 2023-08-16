@@ -36,9 +36,13 @@
     "toast": {
         "updateProfile_success": "Update profile successfully!",
         "createOrder_success": "Create Order successfully!",
-        "copyOrderNumber_success": "Order number copied ({{orderNumber}})",
+        "copyOrderNumber_success": "Order number copied ({{orderNumber}})!",
         "sendOtp_success": "OTP sent successfully!",
-        "review_success": "Review & comment order successfully!"
+        "review_success": "Review & comment order successfully!",
+        "login_success": "Login successfully!",
+        "change_status_success": "Change order status successfully!",
+        "login_email_error": "Your account or password is incorrect!",
+        "error": "An error occurred"
     },
     "form_rule": {
         "name_required": "Please input your name!",

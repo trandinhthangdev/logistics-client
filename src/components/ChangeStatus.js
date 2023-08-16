@@ -4,19 +4,29 @@ import {colorByStatus, labelByStatus, OrderStatusEnum, STATUSES} from "../utils/
 import OrderNumber from "./OrderNumber";
 import {useContext} from "react";
 import {AppContext} from "../contexts/AppContext";
+import {toast} from "react-hot-toast";
+import {useTranslation} from "react-i18next";
 
 const ChangeStatus = (props) => {
+    const {t} = useTranslation();
     const { data, onSuccess } = props;
-    const { isAdmin } = useContext(AppContext);
+    const { isAdmin, setLoading } = useContext(AppContext);
 
     const onChangeStatus = (status) => {
+        setLoading(true)
         axios
             .post(`/api/orders/change-status/${data.orderNumber}`, { status })
             .then((res) => {
+                setLoading(false)
+                toast.success(t('toast.change_status_success'));
                 if (typeof onSuccess === 'function') {
                     onSuccess()
                 }
-            });
+            })
+            .catch(err => {
+                setLoading(false)
+                toast.error(err.response?.data?.message ?? t('toast.error'));
+            })
     };
 
     let listStatuses = [];

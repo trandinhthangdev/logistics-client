@@ -194,9 +194,12 @@ const OrderList = (props) => {
             key: "review_comments",
             render: (value, record) => {
                 return (
-                    <ReviewAndComment
-                        data={record}
-                    />
+                    <div className="max-w-[240px]">
+                        <ReviewAndComment
+                            inTable={true}
+                            data={record}
+                        />
+                    </div>
                 );
             },
         },
@@ -232,6 +235,7 @@ const OrderList = (props) => {
             <div className="flex items-center justify-between pb-2">
                 <Input.Search
                     className="max-w-[240px]"
+                    placeholder={t('label.searchPlaceholder')}
                     value={searchTextInput}
                     onChange={(e) => {
                         setSearchTextInput(e.target.value)

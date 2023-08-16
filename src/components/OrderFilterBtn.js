@@ -86,7 +86,6 @@ const OrderFilterBtn = (props) => {
                             </div>
                             {statusOptions.map((option, index) => {
                                 const isChecked = Array.isArray(status) ? status.includes(option.value) : false;
-                                console.log('isChecked',isChecked)
                                 return (
                                     <div className="">
                                         <Checkbox checked={isChecked} onChange={() => {

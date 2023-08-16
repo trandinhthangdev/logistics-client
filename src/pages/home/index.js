@@ -208,15 +208,18 @@ const Home = (props) => {
             key: "review_comments",
             render: (value, record) => {
                 return (
-                    <ReviewAndComment
-                        data={record}
-                        onSuccess={() => {
-                            setData(prev => ({
-                                ...prev,
-                                page: 0
-                            }))
-                        }}
-                    />
+                    <div className="max-w-[240px]">
+                        <ReviewAndComment
+                            inTable={true}
+                            data={record}
+                            onSuccess={() => {
+                                setData(prev => ({
+                                    ...prev,
+                                    page: 0
+                                }))
+                            }}
+                        />
+                    </div>
                 );
             },
         },

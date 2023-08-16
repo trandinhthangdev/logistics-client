@@ -1,29 +1,37 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import { Form, Input, Button } from 'antd';
 import {  signInWithEmailAndPassword   } from 'firebase/auth';
 import { auth } from "./../../../firebase.config";
 import {AppContext} from "../../../contexts/AppContext";
 import {useNavigate} from "react-router-dom";
 import {useTranslation} from "react-i18next";
+import {toast} from "react-hot-toast";
 
 const AdminLogin = (props) => {
     const {t} = useTranslation()
     const navigate = useNavigate();
     const { setLoading, setUser } = useContext(AppContext);
+    const [isRedirect, setIsRedirect] = useState(false);
+
     const onFinish = (values) => {
         setLoading(true)
         const {email, password} = values;
         signInWithEmailAndPassword(auth, email, password)
             .then((userCredential) => {
-                const user = userCredential.user;
                 setLoading(false)
-                window.location.href = '/admin'
+                setIsRedirect(true);
+                toast.success(t('toast.login_success'));
             })
             .catch((error) => {
-                setLoading(false)
+                setLoading(false);
+                toast.error(t('toast.login_email_error'));
             });
     };
-
+    useEffect(() => {
+        if (isRedirect) {
+            navigate("/admin")
+        }
+    }, [isRedirect]);
     return (
         <div className="flex flex-col items-center justify-center">
             <div className="text-3xl font-bold mb-4">

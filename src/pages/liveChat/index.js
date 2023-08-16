@@ -1,6 +1,6 @@
 import {doc, setDoc, getFirestore, getDoc, where, onSnapshot, collection, addDoc, orderBy, query, serverTimestamp} from "firebase/firestore"
 import {IoMdClose} from "react-icons/io"
-import { Input, Tooltip } from 'antd';
+import {Input, Spin, Tooltip} from 'antd';
 import {MdEmojiEmotions, MdSend} from "react-icons/md"
 import moment from "moment";
 import {useContext, useEffect, useRef, useState} from "react";
@@ -17,7 +17,8 @@ const LiveChat = (props) => {
     const boxRef = useRef(null);
     const { user, loadingUser } = useContext(AppContext);
     const [messages, setMessages] = useState([]);
-    const [messageInput, setMessageInput] = useState("")
+    const [messageInput, setMessageInput] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
     const handleKeyPress = (event) => {
         if (event.key === 'Enter') {
             onSendMessage()
@@ -51,7 +52,12 @@ const LiveChat = (props) => {
         if (!user) return;
         const q = query(collection(db, 'messages'), where('roomId','==', user.uid),orderBy('timestamp'))
         const unsubscribe = onSnapshot(q, snapshot => {
-            setMessages(snapshot.docs.map(doc => doc.data()))
+            setMessages(snapshot.docs.map(doc => doc.data()));
+            if (!isLoading) {
+                setTimeout(() => {
+                    setIsLoading(true)
+                }, 500)
+            }
         })
         return unsubscribe;
     }, []);
@@ -65,7 +71,7 @@ const LiveChat = (props) => {
                 <IoMdClose />
             </div>
         </div>
-        <div className="p-2 flex-1 h-[calc(100%-100px)]">
+        <div className="p-2 flex-1 h-[calc(100%-100px)] relative">
             <div className="h-full border border-gray-100 p-2 overflow-y-auto" ref={boxRef}>
                 {
                     messages.map((item, index) => {
@@ -88,6 +94,11 @@ const LiveChat = (props) => {
                     })
                 }
             </div>
+            {
+                !isLoading && <div className="absolute top-0 left-0 right-0 bottom-0 flex items-center justify-center bg-white">
+                    <Spin />
+                </div>
+            }
         </div>
         <div>
          <Input
