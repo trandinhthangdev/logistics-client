@@ -21,6 +21,8 @@ import { MdLocationOn } from "react-icons/md";
 import { AppContext } from "../../../contexts/AppContext";
 import { useTranslation } from "react-i18next";
 import { CgArrowLongUp } from "react-icons/cg";
+import DeliveryIcon from "./../../../assets/deliver.png"
+import ShippingIcon from "./../../../assets/delivery-truck.png"
 const db = getFirestore(app);
 const TrackingTimeline = (props) => {
     const { orderNumber, order } = props;
@@ -42,6 +44,9 @@ const TrackingTimeline = (props) => {
 
     return (
         <div className="flex flex-col items-center p-2">
+            <div className="font-bold text-xl mb-2">
+                Order journey
+            </div>
             {isAdmin && order?.status === OrderStatusEnum.SHIPPED && (
                 <div
                     onClick={() => {
@@ -56,17 +61,20 @@ const TrackingTimeline = (props) => {
             )}
             <div>
                 {order?.deliveryDate && (
-                    <div className="flex items-center p-2 border-b border-b-gray-300 mb-2 relative">
-                        <div className="flex flex-col">
-                            <div className="text-sm italic">
-                                {moment(order?.deliveryDate).calendar()}
+                    <>
+                        <img className="w-[90px] mb-2 m-auto" src={DeliveryIcon}/>
+                        <div className="flex items-center p-2 border-b border-b-gray-300 mb-2 relative">
+                            <div className="flex flex-col">
+                                <div className="text-sm italic">
+                                    {moment(order?.deliveryDate).calendar()}
+                                </div>
+                                <div className="font-bold">
+                                    {t("label.deliveryDate")}
+                                </div>
                             </div>
-                            <div className="font-bold">
-                                {t("label.deliveryDate")}
-                            </div>
+                            <CgArrowLongUp className="absolute left-[-40px] text-4xl text-blue-600" />
                         </div>
-                        <CgArrowLongUp className="absolute left-[-40px] text-4xl text-blue-600" />
-                    </div>
+                    </>
                 )}
                 {[...routes].reverse().map((item) => {
                     return (
@@ -105,17 +113,20 @@ const TrackingTimeline = (props) => {
                     );
                 })}
                 {order?.shippingDate && (
-                    <div className="flex items-center p-2 border-b border-b-gray-300 mb-2 relative">
-                        <div className="flex flex-col">
-                            <div className="text-sm italic">
-                                {moment(order?.shippingDate).calendar()}
+                    <>
+                        <div className="flex items-center p-2 border-b border-b-gray-300 mb-2 relative">
+                            <div className="flex flex-col">
+                                <div className="text-sm italic">
+                                    {moment(order?.shippingDate).calendar()}
+                                </div>
+                                <div className="font-bold">
+                                    {t("label.shippingDate")}
+                                </div>
                             </div>
-                            <div className="font-bold">
-                                {t("label.shippingDate")}
-                            </div>
+                            <CgArrowLongUp className="absolute left-[-40px] text-4xl text-blue-600" />
                         </div>
-                        <CgArrowLongUp className="absolute left-[-40px] text-4xl text-blue-600" />
-                    </div>
+                        <img className="w-[90px] mt-2 m-auto" src={ShippingIcon}/>
+                    </>
                 )}
             </div>
             {isOpenAdd && (

@@ -11,6 +11,9 @@ import OrderNumber from "../../../components/OrderNumber";
 import {AiOutlineArrowRight} from "react-icons/ai"
 import {debounce} from "lodash";
 import {useTranslation} from "react-i18next";
+import ReviewAndComment from "../../../components/ReviewAndComment";
+import OrderRowDetail from "../../../components/OrderRowDetail";
+import OrderFilterBtn from "../../../components/OrderFilterBtn";
 const { Option } = Select;
 
 const pageSize = 10;
@@ -136,24 +139,24 @@ const OrderList = (props) => {
                 );
             },
         },
-        {
-            title: t('order.label.senderAddress'),
-            dataIndex: "senderAddress",
-            key: "senderAddress",
-            render: (value, record) => {
-                const { province, district, ward } = showAddressByKey({
-                    province: record.senderAddressProvince,
-                    district: record.senderAddressDistrict,
-                    ward: record.senderAddressWard,
-                });
-                return (
-                    <div className="italic">
-                        <div>{`${province}, ${district}, ${ward}`}</div>
-                        <div>{record.senderAddressDescription}</div>
-                    </div>
-                );
-            },
-        },
+        // {
+        //     title: t('order.label.senderAddress'),
+        //     dataIndex: "senderAddress",
+        //     key: "senderAddress",
+        //     render: (value, record) => {
+        //         const { province, district, ward } = showAddressByKey({
+        //             province: record.senderAddressProvince,
+        //             district: record.senderAddressDistrict,
+        //             ward: record.senderAddressWard,
+        //         });
+        //         return (
+        //             <div className="italic">
+        //                 <div>{`${province}, ${district}, ${ward}`}</div>
+        //                 <div>{record.senderAddressDescription}</div>
+        //             </div>
+        //         );
+        //     },
+        // },
         {
             title: t('order.label.recipient'),
             dataIndex: "recipientInfo",
@@ -167,21 +170,33 @@ const OrderList = (props) => {
                 );
             },
         },
+        // {
+        //     title: t('order.label.recipientAddress'),
+        //     dataIndex: "recipientAddress",
+        //     key: "recipientAddress",
+        //     render: (value, record) => {
+        //         const { province, district, ward } = showAddressByKey({
+        //             province: record.recipientAddressProvince,
+        //             district: record.recipientAddressDistrict,
+        //             ward: record.recipientAddressWard,
+        //         });
+        //         return (
+        //             <div className="italic">
+        //                 <div>{`${province}, ${district}, ${ward}`}</div>
+        //                 <div>{record.recipientAddressDescription}</div>
+        //             </div>
+        //         );
+        //     },
+        // },
         {
-            title: t('order.label.recipientAddress'),
-            dataIndex: "recipientAddress",
-            key: "recipientAddress",
+            title: t("order.label.review_comment"),
+            dataIndex: "review_comments",
+            key: "review_comments",
             render: (value, record) => {
-                const { province, district, ward } = showAddressByKey({
-                    province: record.recipientAddressProvince,
-                    district: record.recipientAddressDistrict,
-                    ward: record.recipientAddressWard,
-                });
                 return (
-                    <div className="italic">
-                        <div>{`${province}, ${district}, ${ward}`}</div>
-                        <div>{record.recipientAddressDescription}</div>
-                    </div>
+                    <ReviewAndComment
+                        data={record}
+                    />
                 );
             },
         },
@@ -211,55 +226,47 @@ const OrderList = (props) => {
             },
         },
     ];
-    const statusOptions = [
-        {
-            value: "",
-            label: t('label.all'),
-        },
-        ...STATUSES
-    ];
+
     return (
         <div className="">
             <div className="flex items-center justify-between pb-2">
-                    <Input.Search
-                        className="max-w-[240px]"
-                        value={searchTextInput}
-                        onChange={(e) => {
-                            setSearchTextInput(e.target.value)
-                        }}
-                    />
-                <Select
-                     className="w-[120px]"
-                    placeholder={t('label.selectStatus')}
-                    onChange={(value) => {
-                        const prevFilters = { ...filters };
-                        if (value) {
-                            prevFilters.status = value;
-                        } else {
-                            delete prevFilters.status;
-                        }
-                        setData((prev) => ({
+                <Input.Search
+                    className="max-w-[240px]"
+                    value={searchTextInput}
+                    onChange={(e) => {
+                        setSearchTextInput(e.target.value)
+                    }}
+                />
+                <OrderFilterBtn
+                    filters={filters}
+                    onChangeFilter={(filterNext) => {
+                        setData(prev => ({
                             ...prev,
-                            filters: prevFilters,
+                            filters: filterNext,
                             page: 0,
                             items: [],
-                        }));
+                        }))
                     }}
-                    value={filters?.status ?? ""}
-                >
-                    {statusOptions.map((item) => {
-                        return <Option value={item.value}>{item.label}</Option>;
-                    })}
-                </Select>
+                />
             </div>
             <Table
-                dataSource={items}
+                dataSource={items.map(item => ({
+                    ...item,
+                    key: item._id
+                }))}
                 columns={columns}
                 scroll={{ x: true, y: 'calc(100vh - 320px)' }}
                 pagination={false}
                 loading={loading}
+                expandable={{
+                    expandedRowRender: (record) => <OrderRowDetail data={record} onSuccess={() => {
+                        setData(prev => ({
+                            ...prev,
+                            page: 0
+                        }))
+                    }}/>,
+                }}
             />
-            {/*{loading && <div className="p-2 flex items-center justify-center"><Spin /></div>}*/}
         </div>
     );
 };

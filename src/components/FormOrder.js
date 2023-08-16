@@ -99,10 +99,6 @@ const FormOrder = () => {
                 toast.success("Create Order successfully!");
                 setLoading(false);
                 setIsRedirect(true);
-                // if (res.data?.orderNumber)
-                //     navigate(`/detail-order/${res.data.orderNumber}`);
-                // else
-                // navigate("/", { push: true });
             })
             .catch((err) => {
                 toast.error(err.response);
@@ -390,7 +386,9 @@ const FormOrder = () => {
                             <Input.TextArea />
                         </Form.Item>
                     </Form.Item>
-                    <Form.Item label="Note" name="note">
+                    <Form.Item
+                        label={t("order.label.note")}
+                        name="note">
                         <Input.TextArea />
                     </Form.Item>
                     <Form.Item className="text-right">

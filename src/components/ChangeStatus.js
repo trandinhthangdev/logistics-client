@@ -13,7 +13,9 @@ const ChangeStatus = (props) => {
         axios
             .post(`/api/orders/change-status/${data.orderNumber}`, { status })
             .then((res) => {
-                onSuccess()
+                if (typeof onSuccess === 'function') {
+                    onSuccess()
+                }
             });
     };
 

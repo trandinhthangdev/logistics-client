@@ -69,7 +69,9 @@
             "recipientPhone": "Số điện thoại người nhận",
             "shippingDate": "Ngày gửi hàng",
             "expectedDeliveryDate": "Ngày dự kiến giao hàng",
-            "deliveryDate": "Ngày giao hàng"
+            "deliveryDate": "Ngày giao hàng",
+            "review_comment": "Review & comment",
+            "note": "Note"
         }
     },
     "user": {

@@ -34,10 +34,11 @@
         "deliveryDate": "Delivery date"
     },
     "toast": {
-        "updateProfile_success": "Update profile successfully",
+        "updateProfile_success": "Update profile successfully!",
         "createOrder_success": "Create Order successfully!",
         "copyOrderNumber_success": "Order number copied ({{orderNumber}})",
-        "sendOtp_success": "OTP sent successfully!"
+        "sendOtp_success": "OTP sent successfully!",
+        "review_success": "Review & comment order successfully!"
     },
     "form_rule": {
         "name_required": "Please input your name!",
@@ -69,7 +70,9 @@
             "recipientPhone": "Recipient Phone",
             "shippingDate": "Shipping date",
             "expectedDeliveryDate": "expected Delivery Date",
-            "deliveryDate": "Delivery date"
+            "deliveryDate": "Delivery date",
+            "review_comment": "Review & comment",
+            "note": "Note"
         }
     },
     "user": {

@@ -1,39 +1,43 @@
-import React, {useCallback, useContext, useEffect, useRef, useState} from "react";
+import React, {
+    useCallback,
+    useContext,
+    useEffect,
+    useRef,
+    useState,
+} from "react";
 import axios from "axios";
-import {Table, Input, Select} from "antd";
-import {Link} from "react-router-dom";
-import {debounce} from "lodash";
-import {AppContext} from "../../contexts/AppContext";
-import {BiLogIn} from "react-icons/bi";
+import { Table, Input, Select } from "antd";
+import { Link } from "react-router-dom";
+import { debounce } from "lodash";
+import { AppContext } from "../../contexts/AppContext";
+import { BiLogIn } from "react-icons/bi";
 import OrderNumber from "../../components/OrderNumber";
 import ChangeStatus from "../../components/ChangeStatus";
-import {showAddressByKey} from "../../utils/functions";
-import {AiOutlineArrowRight} from "react-icons/ai";
-import {STATUSES} from "../../utils/contants";
-import {useTranslation} from "react-i18next";
+import { showAddressByKey } from "../../utils/functions";
+import { AiOutlineArrowRight } from "react-icons/ai";
+import { STATUSES } from "../../utils/contants";
+import { useTranslation } from "react-i18next";
+import ReviewAndComment from "../../components/ReviewAndComment";
+import OrderFilterBtn from "../../components/OrderFilterBtn";
+import OrderRowDetail from "../../components/OrderRowDetail";
 const { Option } = Select;
 
 const pageSize = 10;
 const Home = (props) => {
-    const {t,} = useTranslation();
+    const { t } = useTranslation();
     const { user, setIsAuthModal } = useContext(AppContext);
-    const [searchTextInput, setSearchTextInput] = useState("")
+    const [searchTextInput, setSearchTextInput] = useState("");
     const [data, setData] = useState({
         items: [],
         page: 0,
-        searchText: '',
+        searchText: "",
         hasMore: true,
         loading: true,
-        filters: {},
-    })
-    const {
-        items,
-        page,
-        searchText,
-        hasMore,
-        loading,
-        filters
-    } = data;
+        filters: {
+
+        },
+    });
+    const { items, page, searchText, hasMore, loading, filters } = data;
 
     const debouncedSearch = useRef(
         debounce(async (searchText) => {
@@ -51,84 +55,93 @@ const Home = (props) => {
     }, [debouncedSearch]);
 
     useEffect(() => {
-        debouncedSearch(searchTextInput)
-    }, [searchTextInput])
+        debouncedSearch(searchTextInput);
+    }, [searchTextInput]);
     useEffect(() => {
         if (!page) {
-            setData(prev => ({
+            setData((prev) => ({
                 ...prev,
-                page: 1
-            }))
+                page: 1,
+            }));
             return;
         }
-        getData()
+        getData();
     }, [page]);
 
     const getData = () => {
         if (!page) return;
-        setData(prev => ({
+        setData((prev) => ({
             ...prev,
-            loading: true
-        }))
-        axios.get(`/api/orders?page=${page}&limit=${pageSize}&search=${searchText.trim()}&${Object.keys(
-            filters
-        )
-            .map((key) => `${key}=${filters[key]}`)
-            .join("&")}`)
-            .then(res => {
-                setData(prev => ({
+            loading: true,
+        }));
+        axios
+            .get(
+                `/api/orders?page=${page}&limit=${pageSize}&search=${searchText.trim()}&${Object.keys(
+                    filters
+                )
+                    .map((key) => `${key}=${Array.isArray(filters[key]) ? filters[key].join(",") : filters[key]}`)
+                    .join("&")}`
+            )
+            .then((res) => {
+                setData((prev) => ({
                     ...prev,
                     items: page === 1 ? res.data : [...prev.items, ...res.data],
                     hasMore: res.data.length === pageSize,
-                    loading: false
-                }))
-            }).catch(err => {
-        })
-    }
+                    loading: false,
+                }));
+            })
+            .catch((err) => {});
+    };
 
-    const observer = useRef()
-    const lastEndRef = useCallback(node => {
-        if (loading) return
-        if (observer.current) observer.current.disconnect()
-        observer.current = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting && hasMore) {
-                setData( prev => {
-                    return ({
-                        ...prev,
-                        page: prev.page + 1,
-                    })
-                })
-            }
-        })
-        if (node) observer.current.observe(node)
-    }, [loading, hasMore])
+    const observer = useRef();
+    const lastEndRef = useCallback(
+        (node) => {
+            if (loading) return;
+            if (observer.current) observer.current.disconnect();
+            observer.current = new IntersectionObserver((entries) => {
+                if (entries[0].isIntersecting && hasMore) {
+                    setData((prev) => {
+                        return {
+                            ...prev,
+                            page: prev.page + 1,
+                        };
+                    });
+                }
+            });
+            if (node) observer.current.observe(node);
+        },
+        [loading, hasMore]
+    );
 
     const columns = [
         {
-            title: t('order.label.orderNumber'),
+            title: t("order.label.orderNumber"),
             dataIndex: "orderNumber",
             key: "orderNumber",
             render: (value) => {
-                return (
-                    <OrderNumber orderNumber={value}/>
-                )
-            }
-        },
-        {
-            title: t('order.label.status'),
-            dataIndex: "status",
-            key: "status",
-            render: (value, record) => {
-                return <ChangeStatus data={record} onSuccess={() => {
-                    setData(prev => ({
-                        ...prev,
-                        page: 0
-                    }))
-                }} />;
+                return <OrderNumber orderNumber={value} />;
             },
         },
         {
-            title: t('order.label.sender'),
+            title: t("order.label.status"),
+            dataIndex: "status",
+            key: "status",
+            render: (value, record) => {
+                return (
+                    <ChangeStatus
+                        data={record}
+                        onSuccess={() => {
+                            setData((prev) => ({
+                                ...prev,
+                                page: 0,
+                            }));
+                        }}
+                    />
+                );
+            },
+        },
+        {
+            title: t("order.label.sender"),
             dataIndex: "senderInfo",
             key: "senderInfo",
             render: (value, record) => {
@@ -140,26 +153,26 @@ const Home = (props) => {
                 );
             },
         },
+        // {
+        //     title: t("order.label.senderAddress"),
+        //     dataIndex: "senderAddress",
+        //     key: "senderAddress",
+        //     render: (value, record) => {
+        //         const { province, district, ward } = showAddressByKey({
+        //             province: record.senderAddressProvince,
+        //             district: record.senderAddressDistrict,
+        //             ward: record.senderAddressWard,
+        //         });
+        //         return (
+        //             <div className="italic">
+        //                 <div>{`${province}, ${district}, ${ward}`}</div>
+        //                 <div>{record.senderAddressDescription}</div>
+        //             </div>
+        //         );
+        //     },
+        // },
         {
-            title: t('order.label.senderAddress'),
-            dataIndex: "senderAddress",
-            key: "senderAddress",
-            render: (value, record) => {
-                const { province, district, ward } = showAddressByKey({
-                    province: record.senderAddressProvince,
-                    district: record.senderAddressDistrict,
-                    ward: record.senderAddressWard,
-                });
-                return (
-                    <div className="italic">
-                        <div>{`${province}, ${district}, ${ward}`}</div>
-                        <div>{record.senderAddressDescription}</div>
-                    </div>
-                );
-            },
-        },
-        {
-            title: t('order.label.recipient'),
+            title: t("order.label.recipient"),
             dataIndex: "recipientInfo",
             key: "recipientInfo",
             render: (value, record) => {
@@ -171,21 +184,39 @@ const Home = (props) => {
                 );
             },
         },
+        // {
+        //     title: t("order.label.recipientAddress"),
+        //     dataIndex: "recipientAddress",
+        //     key: "recipientAddress",
+        //     render: (value, record) => {
+        //         const { province, district, ward } = showAddressByKey({
+        //             province: record.recipientAddressProvince,
+        //             district: record.recipientAddressDistrict,
+        //             ward: record.recipientAddressWard,
+        //         });
+        //         return (
+        //             <div className="italic">
+        //                 <div>{`${province}, ${district}, ${ward}`}</div>
+        //                 <div>{record.recipientAddressDescription}</div>
+        //             </div>
+        //         );
+        //     },
+        // },
         {
-            title: t('order.label.recipientAddress'),
-            dataIndex: "recipientAddress",
-            key: "recipientAddress",
+            title: t("order.label.review_comment"),
+            dataIndex: "review_comments",
+            key: "review_comments",
             render: (value, record) => {
-                const { province, district, ward } = showAddressByKey({
-                    province: record.recipientAddressProvince,
-                    district: record.recipientAddressDistrict,
-                    ward: record.recipientAddressWard,
-                });
                 return (
-                    <div className="italic">
-                        <div>{`${province}, ${district}, ${ward}`}</div>
-                        <div>{record.recipientAddressDescription}</div>
-                    </div>
+                    <ReviewAndComment
+                        data={record}
+                        onSuccess={() => {
+                            setData(prev => ({
+                                ...prev,
+                                page: 0
+                            }))
+                        }}
+                    />
                 );
             },
         },
@@ -218,74 +249,75 @@ const Home = (props) => {
     const statusOptions = [
         {
             value: "",
-            label: t('label.all'),
+            label: t("label.all"),
         },
-        ...STATUSES
+        ...STATUSES,
     ];
 
-    return <div className="flex flex-col items-center">
-        <div className="font-bold text-2xl">
-            {t('home.name')}
-        </div>
-        <div className="max-w-[1200px] text-center">
-            {t('home.description')}
-        </div>
-        {
-            user
-            ?
+
+    return (
+        <div className="flex flex-col items-center">
+            <div className="font-bold text-2xl">{t("home.name")}</div>
+            <div className="max-w-[1200px] text-center">
+                {t("home.description")}
+            </div>
+            {user ? (
                 <>
                     <div className="w-full flex items-center justify-between pb-2">
                         <Input.Search
                             className="max-w-[240px]"
-                            placeholder={t('label.searchPlaceholder')}
+                            placeholder={t("label.searchPlaceholder")}
                             value={searchTextInput}
                             onChange={(e) => {
-                                setSearchTextInput(e.target.value)
+                                setSearchTextInput(e.target.value);
                             }}
                         />
-                        <Select
-                            className="w-[120px]"
-                            placeholder={t('label.selectStatus')}
-                            onChange={(value) => {
-                                const prevFilters = { ...filters };
-                                if (value) {
-                                    prevFilters.status = value;
-                                } else {
-                                    delete prevFilters.status;
-                                }
-                                setData((prev) => ({
+                        <OrderFilterBtn
+                            filters={filters}
+                            onChangeFilter={(filterNext) => {
+                                setData(prev => ({
                                     ...prev,
-                                    filters: prevFilters,
+                                    filters: filterNext,
                                     page: 0,
                                     items: [],
-                                }));
+                                }))
                             }}
-                            value={filters?.status ?? ""}
-                        >
-                            {statusOptions.map((item) => {
-                                return <Option value={item.value}>{item.label}</Option>;
-                            })}
-                        </Select>
+                        />
                     </div>
                     <Table
                         className="h-full"
-                        dataSource={items}
+                        dataSource={items.map(item => ({
+                            ...item,
+                            key: item._id
+                        }))}
                         columns={columns}
                         scroll={{ x: true, y: 500 }}
                         pagination={false}
                         loading={loading}
+                        expandable={{
+                            expandedRowRender: (record) => <OrderRowDetail data={record} onSuccess={() => {
+                                setData(prev => ({
+                                    ...prev,
+                                    page: 0
+                                }))
+                            }}/>,
+                        }}
                     />
                 </>
-                :
+            ) : (
                 <div className="p-4">
-                    <div onClick={() => {
-                        setIsAuthModal(true);
-                    }} className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600 mr-4">
-                        <div className="mr-1">{t('label.login')}</div>
+                    <div
+                        onClick={() => {
+                            setIsAuthModal(true);
+                        }}
+                        className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600 mr-4"
+                    >
+                        <div className="mr-1">{t("label.login")}</div>
                         <BiLogIn />
                     </div>
                 </div>
-        }
-    </div>;
+            )}
+        </div>
+    );
 };
 export default Home;
