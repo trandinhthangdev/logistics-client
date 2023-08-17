@@ -9,7 +9,7 @@ import { useTranslation } from "react-i18next";
 
 const { Option } = Select;
 
-const FormOrder = () => {
+const FormOrder = ({ init }) => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const { userInfo, user, setLoading, setIsAuthModal } =
@@ -44,6 +44,9 @@ const FormOrder = () => {
             district: recipientAddressDistrict,
         });
     useEffect(() => {
+        if (init) {
+            return;
+        }
         if (userInfo !== undefined) {
             if (userInfo) {
                 setAddress({
@@ -86,6 +89,33 @@ const FormOrder = () => {
             );
         }
     }, [userInfo]);
+
+    useEffect(() => {
+        if (init) {
+            setAddress({
+                senderAddressProvince: init.senderAddressProvince,
+                senderAddressDistrict: init.senderAddressDistrict,
+                recipientAddressProvince: init.recipientAddressProvince,
+                recipientAddressDistrict: init.recipientAddressDistrict,
+            });
+            setData((prev) => ({
+                ...prev,
+                senderName: init.senderName,
+                senderPhone: init.senderPhone,
+                senderAddressProvince: init.senderAddressProvince,
+                senderAddressDistrict: init.senderAddressDistrict,
+                senderAddressWard: init.senderAddressWard,
+                senderAddressDescription: init.senderAddressDescription,
+                recipientName: init.recipientName,
+                recipientPhone: init.recipientPhone,
+                recipientAddressProvince: init.recipientAddressProvince,
+                recipientAddressDistrict: init.recipientAddressDistrict,
+                recipientAddressWard: init.recipientAddressWard,
+                recipientAddressDescription: init.recipientAddressDescription,
+                note: init.note,
+            }));
+        }
+    }, []);
     const onFinish = (values) => {
         // check login
         if (!user) {
@@ -93,6 +123,22 @@ const FormOrder = () => {
             return;
         }
         setLoading(true);
+        if (init) {
+            axios
+                .put(`/api/orders/${init.orderNumber}`, values)
+                .then((res) => {
+                    toast.success("Update Order successfully!");
+                    setLoading(false);
+                    setIsRedirect(true);
+                })
+                .catch((err) => {
+                    toast.error(
+                        err.response?.data?.message ?? t("toast.error")
+                    );
+                    setLoading(false);
+                });
+            return;
+        }
         axios
             .post("/api/orders", values)
             .then((res) => {
@@ -101,7 +147,7 @@ const FormOrder = () => {
                 setIsRedirect(true);
             })
             .catch((err) => {
-                toast.error(err.response);
+                toast.error(err.response?.data?.message ?? t("toast.error"));
                 setLoading(false);
             });
     };
@@ -118,7 +164,11 @@ const FormOrder = () => {
         <div className="flex flex-col items-center">
             <div className="w-[600px] max-w-[calc(100vw-40px)]">
                 <div className="font-bold text-2xl mb-2 text-center">
-                    {t("label.createOrder")}
+                    {init
+                        ? t("label.editOrder", {
+                              orderNumber: init.orderNumber,
+                          })
+                        : t("label.createOrder")}
                 </div>
                 <Form
                     name="FormOrder"
@@ -386,9 +436,7 @@ const FormOrder = () => {
                             <Input.TextArea />
                         </Form.Item>
                     </Form.Item>
-                    <Form.Item
-                        label={t("order.label.note")}
-                        name="note">
+                    <Form.Item label={t("order.label.note")} name="note">
                         <Input.TextArea />
                     </Form.Item>
                     <Form.Item className="text-right">

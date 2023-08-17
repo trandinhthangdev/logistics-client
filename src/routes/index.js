@@ -3,6 +3,7 @@ import AdminHome from "../pages/admin/home";
 import AdminLogin from "../pages/admin/login";
 import AdminTrackingOrder from "../pages/admin/trackingOrder";
 import DetailOrder from "../pages/detailOrder";
+import EditOrder from "../pages/editOrder";
 import Home from "../pages/home";
 import Login from "../pages/login";
 import NewOrder from "../pages/newOrder";
@@ -18,7 +19,7 @@ export const mainRoutes = [
         component: Login,
         path: links.PATH_LOGIN,
         isExact: true,
-        isAuth: true
+        isAuth: true,
     },
     {
         component: NewOrder,
@@ -37,6 +38,12 @@ export const mainRoutes = [
         isClient: true,
     },
     {
+        component: EditOrder,
+        path: links.PATH_EDIT_ORDER,
+        isExact: true,
+        isClient: true,
+    },
+    {
         component: AdminHome,
         path: links.PATH_ADMIN,
         isExact: true,
@@ -47,7 +54,7 @@ export const mainRoutes = [
         path: links.PATH_ADMIN_LOGIN,
         isExact: true,
         isAdmin: true,
-        isAuth: true
+        isAuth: true,
     },
     {
         component: AdminChat,

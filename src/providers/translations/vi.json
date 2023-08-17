@@ -13,6 +13,7 @@
         "profile": "Hồ sơ cá nhân",
         "submit": "Gửi",
         "createOrder": "Tạo đơn hàng",
+        "editOrder": "Edit order ({{orderNumber}})",
         "select_province": "Chọn Tỉnh / Thành phố",
         "select_district": "Chọn Quận / Huyện",
         "select_ward": "Chọn Phường / Xã",
@@ -37,7 +38,13 @@
         "updateProfile_success": "Cập nhật hồ sơ thành công",
         "createOrder_success": "Tạo Đơn hàng thành công!",
         "copyOrderNumber_success": "Số đơn hàng đã được sao chép ({{orderNumber}})",
-        "sendOtp_success": "Gửi OTP thành công!"
+        "sendOtp_success": "Gửi OTP thành công!",
+        "review_success": "Review & comment order successfully!",
+        "login_success": "Login successfully!",
+        "delete_success": "Delete order successfully!",
+        "change_status_success": "Change order status successfully!",
+        "login_email_error": "Your account or password is incorrect!",
+        "error": "An error occurred"
     },
     "form_rule": {
         "name_required": "Vui lòng nhập tên của bạn!",

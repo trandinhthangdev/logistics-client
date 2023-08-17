@@ -14,12 +14,13 @@ import { BiLogIn } from "react-icons/bi";
 import OrderNumber from "../../components/OrderNumber";
 import ChangeStatus from "../../components/ChangeStatus";
 import { showAddressByKey } from "../../utils/functions";
-import { AiOutlineArrowRight } from "react-icons/ai";
+import { AiOutlineArrowRight, AiFillEdit } from "react-icons/ai";
 import { STATUSES } from "../../utils/contants";
 import { useTranslation } from "react-i18next";
 import ReviewAndComment from "../../components/ReviewAndComment";
 import OrderFilterBtn from "../../components/OrderFilterBtn";
 import OrderRowDetail from "../../components/OrderRowDetail";
+import DeleteOrderBtn from "../../components/DeleteOrderBtn";
 const { Option } = Select;
 
 const pageSize = 10;
@@ -33,9 +34,7 @@ const Home = (props) => {
         searchText: "",
         hasMore: true,
         loading: true,
-        filters: {
-
-        },
+        filters: {},
     });
     const { items, page, searchText, hasMore, loading, filters } = data;
 
@@ -79,7 +78,14 @@ const Home = (props) => {
                 `/api/orders?page=${page}&limit=${pageSize}&search=${searchText.trim()}&${Object.keys(
                     filters
                 )
-                    .map((key) => `${key}=${Array.isArray(filters[key]) ? filters[key].join(",") : filters[key]}`)
+                    .map(
+                        (key) =>
+                            `${key}=${
+                                Array.isArray(filters[key])
+                                    ? filters[key].join(",")
+                                    : filters[key]
+                            }`
+                    )
                     .join("&")}`
             )
             .then((res) => {
@@ -213,10 +219,10 @@ const Home = (props) => {
                             inTable={true}
                             data={record}
                             onSuccess={() => {
-                                setData(prev => ({
+                                setData((prev) => ({
                                     ...prev,
-                                    page: 0
-                                }))
+                                    page: 0,
+                                }));
                             }}
                         />
                     </div>
@@ -228,35 +234,42 @@ const Home = (props) => {
             dataIndex: "action",
             key: "action",
             render: (value, record, index) => {
-                if (index === items.length - 1) {
-                    return (
-                        <div ref={lastEndRef}>
-                            <Link to={`/detail-order/${record.orderNumber}`}>
-                                <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
-                                    <AiOutlineArrowRight />
-                                </div>
-                            </Link>
-                        </div>
-                    );
-                }
                 return (
-                    <Link to={`/detail-order/${record.orderNumber}`}>
-                        <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
-                            <AiOutlineArrowRight />
-                        </div>
-                    </Link>
+                    <div
+                        className="flex items-center"
+                        ref={
+                            index === items.length - 1 ? lastEndRef : undefined
+                        }
+                    >
+                        <DeleteOrderBtn
+                            data={record}
+                            onSuccess={() => {
+                                setData((prev) => ({
+                                    ...prev,
+                                    items: prev.items.filter(
+                                        (item) => item._id !== record._id
+                                    ),
+                                }));
+                            }}
+                        />
+                        <Link
+                            className="mx-2"
+                            to={`/edit-order/${record.orderNumber}`}
+                        >
+                            <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-blue-400">
+                                <AiFillEdit />
+                            </div>
+                        </Link>
+                        <Link to={`/detail-order/${record.orderNumber}`}>
+                            <div className="flex items-center justify-center cursor-pointer p-2 rounded-md text-white bg-amber-600">
+                                <AiOutlineArrowRight />
+                            </div>
+                        </Link>
+                    </div>
                 );
             },
         },
     ];
-    const statusOptions = [
-        {
-            value: "",
-            label: t("label.all"),
-        },
-        ...STATUSES,
-    ];
-
 
     return (
         <div className="flex flex-col items-center">
@@ -278,32 +291,37 @@ const Home = (props) => {
                         <OrderFilterBtn
                             filters={filters}
                             onChangeFilter={(filterNext) => {
-                                setData(prev => ({
+                                setData((prev) => ({
                                     ...prev,
                                     filters: filterNext,
                                     page: 0,
                                     items: [],
-                                }))
+                                }));
                             }}
                         />
                     </div>
                     <Table
                         className="h-full"
-                        dataSource={items.map(item => ({
+                        dataSource={items.map((item) => ({
                             ...item,
-                            key: item._id
+                            key: item._id,
                         }))}
                         columns={columns}
                         scroll={{ x: true, y: 500 }}
                         pagination={false}
                         loading={loading}
                         expandable={{
-                            expandedRowRender: (record) => <OrderRowDetail data={record} onSuccess={() => {
-                                setData(prev => ({
-                                    ...prev,
-                                    page: 0
-                                }))
-                            }}/>,
+                            expandedRowRender: (record) => (
+                                <OrderRowDetail
+                                    data={record}
+                                    onSuccess={() => {
+                                        setData((prev) => ({
+                                            ...prev,
+                                            page: 0,
+                                        }));
+                                    }}
+                                />
+                            ),
                         }}
                     />
                 </>

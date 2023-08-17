@@ -1,6 +1,7 @@
 export const PATH_HOME = "/";
 export const PATH_NEW_ORDER = "/new-order";
 export const PATH_DETAIL_ORDER = "/detail-order/:orderNumber";
+export const PATH_EDIT_ORDER = "/edit-order/:orderNumber";
 export const PATH_PROFILE = "/profile";
 export const PATH_LOGIN = "/login";
 

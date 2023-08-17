@@ -13,6 +13,7 @@
         "profile": "Profile",
         "submit": "Submit",
         "createOrder": "Create order",
+        "editOrder": "Edit order ({{orderNumber}})",
         "select_province": "Select Province",
         "select_district": "Select District",
         "select_ward": "Select Ward",
@@ -40,6 +41,7 @@
         "sendOtp_success": "OTP sent successfully!",
         "review_success": "Review & comment order successfully!",
         "login_success": "Login successfully!",
+        "delete_success": "Delete order successfully!",
         "change_status_success": "Change order status successfully!",
         "login_email_error": "Your account or password is incorrect!",
         "error": "An error occurred"
